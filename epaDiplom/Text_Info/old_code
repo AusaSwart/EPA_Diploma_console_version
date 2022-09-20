@@ -1,0 +1,80 @@
+//                                                String tmp = "SELECT login_user FROM public.login WHERE login_user='"
+//                                                        + loginUser + "';";
+//                                                stmt = c.createStatement();
+//                                                ResultSet rs = stmt.executeQuery(tmp);
+//                                                while (rs.next()) {
+//                                                        if (rs != null) {
+//                                                                System.out.println("   Such login exist, go next");
+//                                                        }
+//                                                }
+                                                //password
+
+//                                                tmp = "SELECT password_user, login_user FROM public.login WHERE password_user='" +
+//                                                        passwordUser + "' AND login_user='" + loginUser + "';";
+//                                                stmt = c.createStatement();
+//                                                rs = stmt.executeQuery(tmp);
+//                                                while (rs.next()) {
+//                                                        if (rs != null) {
+//                                                                System.out.println("   Okay, it's correct");
+//                                                                System.out.println();
+//                                                        }
+//                                                }
+
+//                                                stmt = c.createStatement();
+//                                                tmp = "SELECT id_main_info_login FROM public.login WHERE login_user ='" +
+//                                                        loginUser + "' AND password_user ='" + passwordUser + "';";
+//                                                rs = stmt.executeQuery(tmp);
+//                                                while (rs.next()) {
+//                                                        int idEmpl = rs.getInt("id_main_info_login");
+//                                                        idEMPLOYEE = idEmpl;
+//                                                        correct = true;
+//                                                        System.out.println("   Hello employee № " + idEMPLOYEE);
+//                                                        System.out.println();
+//                                                }
+
+//                                                stmt = c.createStatement();
+//                                                String tmp = "SELECT login_user FROM public.login WHERE login_user='"
+//                                                          + loginUser + "';";
+//                                                ResultSet rs = stmt.executeQuery(tmp);
+//                                                if (rs.next()) {
+//                                                        System.out.println("   Incorrect, this login is already taken ");
+//                                                        System.out.println("   Try again");
+//                                                } else {
+//                                                        System.out.println("   Okay, now password");
+//                                                        System.out.println();
+//                                                        check = true;
+//                                                }
+
+
+//                        stmt = c.createStatement();
+//                        String tmp = "SELECT id_task, id_employee,comment_te FROM public.emp_task WHERE id_executor='"
+//                                + idEMPLOYEE + "';";
+//                        ResultSet rs = stmt.executeQuery(tmp);
+//                        while (rs.next()) {
+//                                int idTask = rs.getInt("id_task");
+//                                int idEmployee = rs.getInt("id_employee");
+//                                String comment = rs.getString("comment_te");
+//                                System.out.println("   Task you're need to do is №" +idTask);
+//                                System.out.println("   Comment: " + comment);
+//                                System.out.println("   From employee №" + idEmployee);
+//                                System.out.println();
+//                        }
+
+
+//                                        stmt = c.createStatement();
+//                                        String tmp = "INSERT INTO employee (privilege, status) VALUES(1, 1);";
+//                                        stmt.executeUpdate(tmp);
+//                                        stmt = c.createStatement();
+//                                        tmp = "SELECT MAX(id) FROM public.employee;";
+//                                        ResultSet rs = stmt.executeQuery(tmp);
+//                                        while (rs.next()) {
+//                                                 int idEmpl = rs.getInt("max");
+//                                                 idEMPLOYEE = idEmpl;
+//                                        }
+//                                        tmp = "INSERT INTO main_info (id_main_info) VALUES(" + idEMPLOYEE + " );";
+//                                        stmt.executeUpdate(tmp);
+//                                        tmp = "INSERT INTO login (login_user, password_user, id_main_info_login) VALUES('" +
+//                                                loginUser + "','" + passwordUser + "','" + idEMPLOYEE + "');";
+//                                        stmt.executeUpdate(tmp);
+//                                        tmp = "INSERT INTO contact (id_main_info_contact) VALUES('" + idEMPLOYEE + "');";
+//                                        stmt.executeUpdate(tmp);
