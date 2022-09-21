@@ -62,8 +62,8 @@ public class MainInfoDAO extends DataAccessObject<MainInfo> {
             statement.setString(2, dto.getMiddleName());
             statement.setString(3, dto.getLastName());
             statement.setString(4, dto.getCabinetOffice());
-            statement.setDate(5, (Date) dto.getBirthD());
-            statement.setDate(6, (Date) dto.getEntryD());
+            statement.setDate(5, dto.getBirthD());
+            statement.setDate(6, dto.getEntryD());
             statement.setLong(7, dto.getId());
             statement.execute();
             this.connection.commit();

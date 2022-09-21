@@ -1,9 +1,11 @@
 package sql.logic.models.DAO;
 
+import sql.logic.models.entities.EmployeeTask;
 import sql.logic.models.entities.Task;
 import sql.logic.models.util.DataAccessObject;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDAO extends DataAccessObject<Task> {
@@ -15,6 +17,24 @@ public class TaskDAO extends DataAccessObject<Task> {
     private static final String DELETE = "DELETE FROM task WHERE id = ?";
     private static final String UPDATE = "UPDATE task SET date_task = ? WHERE id = ?";
     private static final String INSERT = "INSERT INTO task (date_task) VALUES (?)";
+
+    public List<Task> findByIDListOfTask(long id){
+        List<Task> tasks = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE);){
+            statement.setLong(1, id);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                Task task = new Task();
+                task.setId(rs.getLong("id"));
+                task.setDateTask(rs.getDate("date_task"));
+                tasks.add(task);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return tasks;
+    }
 
     @Override
     public Task findById(long id) {

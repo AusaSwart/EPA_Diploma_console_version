@@ -6,8 +6,8 @@ public class Contact implements DataTransferObject {
 
     private long id_main_info_contact;
     private String location_street;
-    private int work_number;
-    private int personal_number;
+    private long work_number;
+    private long personal_number;
     private String mail;
 
     public long getId() {
@@ -24,15 +24,15 @@ public class Contact implements DataTransferObject {
         this.location_street = location_street;
     }
 
-    public int getWorkNumber() {return work_number;}
+    public long getWorkNumber() {return work_number;}
 
-    public void setWorkNumber(int work_number) {
+    public void setWorkNumber(long work_number) {
         this.work_number = work_number;
     }
 
-    public int getPersonalNumber() {return personal_number;}
+    public long getPersonalNumber() {return personal_number;}
 
-    public void setPersonalNumber(int personal_number) {
+    public void setPersonalNumber(long personal_number) {
         this.personal_number = personal_number;
     }
 

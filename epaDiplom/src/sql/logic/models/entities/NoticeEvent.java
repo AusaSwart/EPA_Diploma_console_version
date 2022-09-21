@@ -29,10 +29,10 @@ public class NoticeEvent implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("notice_event{");
-        sb.append("id_recipient=").append(id_recipient);
-        sb.append(", id_event='").append(id_event).append('\'');
-        sb.append(", id_employee='").append(id_employee).append('\'');
+        final StringBuilder sb = new StringBuilder("Notice of event \n   {");
+        sb.append(" id of recipient: №").append(id_recipient);
+        sb.append(", id of event: №").append(id_event);
+        sb.append(", id of employee: №").append(id_employee);
         sb.append('}');
         return sb.toString();
     }

@@ -34,11 +34,11 @@ public class EmployeeTask implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("emp_task{");
-        sb.append("id_executor=").append(id_executor);
-        sb.append(", id_employee='").append(id_employee).append('\'');
-        sb.append(", id_task='").append(id_task).append('\'');
-        sb.append(", comment_te='").append(comment_te).append('\'');
+        final StringBuilder sb = new StringBuilder("Task need to do \n{");
+        sb.append(" id of executor: ").append(id_executor);
+        sb.append(", id of employee: ").append(id_employee);
+        sb.append(", id of task: ").append(id_task);
+        sb.append(",\n   comment for task: \"").append(comment_te).append('\"');
         sb.append('}');
         return sb.toString();
     }

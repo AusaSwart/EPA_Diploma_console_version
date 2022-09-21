@@ -23,21 +23,19 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
             "VALUES (?, ?, ?)";
     private static final String GET_LAST_VALUE = "SELECT MAX(id) FROM employee";
 
-    //____________________________________________???????
-    public Employee findIdEmp(Employee dto) {
-        Employee employee = new Employee();
+    public Employee findMaxIdEmp(Employee employee) {
         try(PreparedStatement statement = this.connection.prepareStatement(GET_LAST_VALUE);){
-            //ResultSet rs = statement.executeQuery();
-            //while(rs.next()){
-                employee.setId(rs.getLong("max"));
-            //}
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+            employee.setId(rs.getLong("max"));
+            }
         }catch (SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         return employee;
     }
-//_________________________??????
+
     @Override
     public Employee findById(long id) {
         Employee employee = new Employee();

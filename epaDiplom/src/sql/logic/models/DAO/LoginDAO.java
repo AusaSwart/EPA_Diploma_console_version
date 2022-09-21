@@ -1,6 +1,7 @@
 package sql.logic.models.DAO;
 
 import sql.logic.models.entities.Login;
+import sql.logic.models.entities.MainInfo;
 import sql.logic.models.util.DataAccessObject;
 
 import java.sql.*;
@@ -17,7 +18,7 @@ public class LoginDAO extends DataAccessObject<Login> {
     private static final String UPDATE = "UPDATE login SET login_user = ?, " +
             "password_user = ?  WHERE id_main_info_login = ?";
     private static final String INSERT = "INSERT INTO login (login_user, password_user, " +
-            " WHERE id_main_info_login) VALUES (?, ?, ?)";
+            " id_main_info_login) VALUES (?, ?, ?)";
     private static final String GET_LOGIN_N_PASSWORD = "SELECT login_user, password_user, id_main_info_login " +
             "FROM login WHERE login_user = ? AND password_user = ? ";
     private static final String GET_LOGIN = "SELECT login_user FROM login WHERE login_user = ?";
@@ -109,18 +110,25 @@ public class LoginDAO extends DataAccessObject<Login> {
 
     @Override
     public Login create(Login dto) {
-        try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
-            statement.setString(1, dto.getLoginUser());
-            statement.setString(2, dto.getPasswordUser());
-            statement.setLong(3, dto.getId());
-
-            statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+        Login login = null;
+        try{
+            this.connection.setAutoCommit(false);
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
+            statement.setString(1, dto.getLoginUser());
+            statement.setString(2, dto.getPasswordUser());
+            statement.setLong(3, dto.getId());
+            statement.execute();
+            this.connection.commit();
+            login = this.findById(dto.getId());
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return login;
     }
 
     @Override

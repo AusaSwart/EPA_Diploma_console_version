@@ -28,8 +28,8 @@ public class ContactDAO extends DataAccessObject<Contact> {
             while(rs.next()){
                 contact.setId(rs.getLong("id_main_info_contact"));
                 contact.setLocationStreet(rs.getString("location_street"));
-                contact.setWorkNumber(rs.getInt("work_number"));
-                contact.setPersonalNumber(rs.getInt("personal_number"));
+                contact.setWorkNumber(rs.getLong("work_number"));
+                contact.setPersonalNumber(rs.getLong("personal_number"));
                 contact.setMail(rs.getString("mail"));
 
             }
@@ -56,8 +56,8 @@ public class ContactDAO extends DataAccessObject<Contact> {
         }
         try(PreparedStatement statement = this.connection.prepareStatement(UPDATE);){
             statement.setString(1, dto.getLocationStreet());
-            statement.setInt(2, dto.getWorkNumber());
-            statement.setInt(3, dto.getPersonalNumber());
+            statement.setLong(2, dto.getWorkNumber());
+            statement.setLong(3, dto.getPersonalNumber());
             statement.setString(4, dto.getMail());
             statement.setLong(5, dto.getId());
             statement.execute();
@@ -80,8 +80,8 @@ public class ContactDAO extends DataAccessObject<Contact> {
     public Contact create(Contact dto) {
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setString(1, dto.getLocationStreet());
-            statement.setInt(2, dto.getWorkNumber());
-            statement.setInt(3, dto.getPersonalNumber());
+            statement.setLong(2, dto.getWorkNumber());
+            statement.setLong(3, dto.getPersonalNumber());
             statement.setString(4, dto.getMail());
             statement.execute();
             int id = this.getLastVal(EMPLOYEE_SEQUENCE);

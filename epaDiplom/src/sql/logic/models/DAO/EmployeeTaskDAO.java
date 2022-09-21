@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
@@ -21,6 +22,26 @@ public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
             "comment_te = ? WHERE id_executor = ?";
     private static final String INSERT = "INSERT INTO emp_task (id_employee, id_task," +
         " comment_te) VALUES (?)";
+
+    public List<EmployeeTask> findByIDList(long id){
+        List<EmployeeTask> employeeTasks = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE);){
+            statement.setLong(1, id);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                EmployeeTask employeeTask = new EmployeeTask();
+                employeeTask.setId(rs.getLong("id_executor"));
+                employeeTask.setIdEmployee(rs.getLong("id_employee"));
+                employeeTask.setIdTask(rs.getLong("id_task"));
+                employeeTask.setCommentTE(rs.getString("comment_te"));
+                employeeTasks.add(employeeTask);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return employeeTasks;
+    }
 
     @Override
     public EmployeeTask findById(long id) {

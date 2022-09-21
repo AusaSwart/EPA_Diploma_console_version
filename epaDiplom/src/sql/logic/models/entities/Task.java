@@ -22,9 +22,9 @@ public class Task implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("task{");
-        sb.append("id=").append(id);
-        sb.append(", date_task='").append(date_task).append('\'');
+        final StringBuilder sb = new StringBuilder("   Task {");
+        sb.append("№ ").append(id);
+        sb.append("\n Date of task: '").append(date_task).append('\'');
         sb.append('}');
         return sb.toString();
     }

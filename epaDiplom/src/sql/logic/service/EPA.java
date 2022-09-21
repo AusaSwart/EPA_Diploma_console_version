@@ -6,19 +6,23 @@ import sql.logic.repositoryConnectDB.DBConnectionManager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class EPA {
 
         public static void main(String[] args) {
 
-            //connection to DB
+        // connection to DB
         DBConnectionManager dcm = new DBConnectionManager("127.0.0.1:5432",
                 "EPA", "postgres", "123qwe");
 
-            //id for connection with an account of employee
+        // id for connection with an account of employee
         long idEMPLOYEE = 0;
-        //Statement stmt = null;
 
                 try {
                         // part with connection to DB
@@ -27,7 +31,7 @@ public class EPA {
                         System.out.println("   Connected to the database!");
                         System.out.println("________________________________________________");
 
-                        //employee greetings
+                        // employee greetings
                         System.out.println("________Hello, Employee. Present yourself________");
                         System.out.println("   Please, tape : \n   1 - If you are already have login;");
                         System.out.println("   2 - If you are need to register;");
@@ -35,11 +39,11 @@ public class EPA {
 
                         boolean done = false;
 
-                        //main list: login or registration
+                        // main list: login or registration
                         Scanner input = new Scanner(System.in);
                         String decision;
                         do {
-                                // login (already have account)
+                                // login (already have an account)
                                 decision = input.nextLine();
                                 if (decision.equals("1")) {
                                         boolean correct = false;
@@ -64,7 +68,6 @@ public class EPA {
 
                                         } while (!correct);
 
-                                        System.out.println();
                                         System.out.println("   We are done with the entrance");
                                         System.out.println("________________________________________________________");
                                         System.out.println();
@@ -72,7 +75,7 @@ public class EPA {
 
                                 }
 
-                                // register (doesnt have account)
+                                // register (doesn't have an account)
                                 else if (decision.equals("2")) {
 
                                         System.out.println("________Lets create your account________");
@@ -83,7 +86,7 @@ public class EPA {
                                         String loginUser;
                                         boolean check = false;
 
-                                        // check login, if exist => create new
+                                        // check login, if doesn't exist => create new account
                                         do {
                                                 loginUser = input.nextLine();
                                                 System.out.println();
@@ -103,53 +106,58 @@ public class EPA {
                                         System.out.println();
 
                                         //put it into DB
+                                        // create employee table
                                         EmployeeDAO employeeDAO = new EmployeeDAO(c);
                                         Employee employee = new Employee();
                                         employee.setStatus(1);
                                         employee.setPrivilege(0);
                                         employee.setIdDep(0);
                                         employeeDAO.create(employee);
+                                        employeeDAO = new EmployeeDAO(c);
                                         employee = new Employee();
-                                        employeeDAO.findIdEmp(employee);
+                                        employee = employeeDAO.findMaxIdEmp(employee);
                                         idEMPLOYEE = employee.getId();
-                                        System.out.println("   " + idEMPLOYEE + " created");
+
+                                        System.out.println("___Employee table created___");
                                         System.out.println();
 
-                                        // create login 'n password
-//                                        LoginDAO loginDAO = new LoginDAO(c);
-//                                        Login login = new Login();
-//                                        login.setLoginUser(loginUser);
-//                                        login.setPasswordUser(passwordUser);
-//                                        login.setId(idEMPLOYEE);
-//                                        loginDAO.create(login);
-//                                        System.out.println("   Login created");
-//                                        System.out.println();
+                                        // create main info table
+                                        MainInfoDAO mainInfoDAO = new MainInfoDAO(c);
+                                        MainInfo mainInfo = new MainInfo();
+                                        mainInfo.setId(idEMPLOYEE);
 
-                                        // create main info
-//                                        MainInfoDAO mainInfoDAO = new MainInfoDAO(c);
-//                                        MainInfo mainInfo = new MainInfo();
-//                                        mainInfo.setId(idEMPLOYEE);
-//                                        System.out.println("   Entry day:");
+                                        System.out.println("   Entry day (MM.dd.yyyy):");
 
-//                                        String buffer = input.nextLine();
-//
-//                                        SimpleDateFormat format = new SimpleDateFormat();
-//                                        format.applyPattern("dd.MM.yyyy");
-//                                        Date entryD = format.parse(buffer);
-//                                        mainInfo.setEntryD(entryD);
-//
-//                                        System.out.println("   Now first, middle and last name:");
-//
-//                                        String name = input.nextLine();
-//                                        mainInfo.setFirstName(name);
-//                                        name = input.nextLine();
-//                                        mainInfo.setMiddleName(name);
-//                                        name = input.nextLine();
-//                                        mainInfo.setLastName(name);
-//
-//                                        mainInfoDAO.create(mainInfo);
+                                        String buffer = input.nextLine();
+                                        DateFormat dtFmt = null;
+                                        dtFmt = new SimpleDateFormat("MM.dd.yyyy");
+                                        java.sql.Date entryD = new Date(dtFmt.parse(buffer).getTime());
+                                        mainInfo.setEntryD(entryD);
 
+                                        System.out.println("   Now first, middle and last name:");
 
+                                        String name = input.nextLine();
+                                        mainInfo.setFirstName(name);
+                                        name = input.nextLine();
+                                        mainInfo.setMiddleName(name);
+                                        name = input.nextLine();
+                                        mainInfo.setLastName(name);
+
+                                        mainInfoDAO.create(mainInfo);
+                                        System.out.println();
+                                        System.out.println("___Main info table created___");
+                                        System.out.println();
+
+                                        // create login table
+                                        LoginDAO loginDAO = new LoginDAO(c);
+                                        Login login = new Login();
+                                        login.setLoginUser(loginUser);
+                                        login.setPasswordUser(passwordUser);
+                                        login.setId(idEMPLOYEE);
+
+                                        loginDAO.create(login);
+                                        System.out.println("___Login created___");
+                                        System.out.println();
 
                                         System.out.println("   Hello, new employee №" + idEMPLOYEE);
                                         System.out.println();
@@ -169,26 +177,26 @@ public class EPA {
 
                         //Show tasks, connected with this login
 
-//                        System.out.println("   Today's tasks :");
-//
-//                        EmployeeTaskDAO employeeTaskDAO = new EmployeeTaskDAO(c);
-//                        EmployeeTask employeeTask = employeeTaskDAO.findById(idEMPLOYEE);
-//                        System.out.println();
-//
-//                        // сделать список
-//                        System.out.println("   Task you're need to do is №" + employeeTask.getIdTask());
-//                        System.out.println("   Comment: " + employeeTask.getCommentTE());
-//                        System.out.println("   From employee №" + employeeTask.getIdEmployee());
-//                        System.out.println();
-//
-//                        System.out.println("________________________________________________");
-//                        System.out.println();
+                        System.out.println("   Today's tasks :");
+
+                        EmployeeTaskDAO employeeTaskDAO = new EmployeeTaskDAO(c);
+                        System.out.println();
+                        employeeTaskDAO.findByIDList(idEMPLOYEE).forEach(System.out::println);
+                        System.out.println();
+//____________________(!) need to do additional list of table task, connected with this (emp_task) through id of task
+                        // n do check on existing tasks
+
+                        System.out.println("________________________________________________");
+                        System.out.println();
 
                         // events, connected with this login
-//                        EventDAO eventDAO = new EventDAO(c);
-//                        Event event = eventDAO.findById(idEMPLOYEE);
-                        // сделать список
+                        NoticeEventDAO noticeEventDAO = new NoticeEventDAO(c);
+                        noticeEventDAO.findByIdList(idEMPLOYEE).forEach(System.out::println);
+//____________________(!) need to do additional list for Event, n connect with id of recipient
+                        // n check on existing event
 
+
+                        // old part, but work correctly
 //                        System.out.println("   Today's events for you :");
 //                        stmt = c.createStatement();
 //                        tmp = "SELECT id_event FROM public.notice_event WHERE id_recipient='"
@@ -219,10 +227,15 @@ public class EPA {
 
 
 
-                        //тоже нужен список
-                        // log
+
+//____________________(!) create log statements, check on existing and connection with table documents
+                        // also do types of leave n approve from recipient
 
                         System.out.println();
+
+
+
+                        // old part, but work correctly
 //                        stmt = c.createStatement();
 //                        tmp = "SELECT id, id_employee, type_leave, date_leave, days_sum, date_of_ls,"
 //                                + "comment_ls, approve FROM public.log_statement WHERE id_approver ="
@@ -277,24 +290,58 @@ public class EPA {
 
 
                                 switch (decision) {
+                                        // Main Info of employee
                                         case "1":
-//                                                EmployeeDAO employeeDAO = new EmployeeDAO(c);
-//                                                Employee employee = employeeDAO.findById(idEMPLOYEE);
-//                                                DepartmentDAO departmentDAO = new DepartmentDAO(c);
-//                                                Department department = departmentDAO.findById(employee.getIdDep());
-//                                                MainInfoDAO mainInfoDAO = new MainInfoDAO(c);
-//                                                MainInfo mainInfo = mainInfoDAO.findById(idEMPLOYEE);
-//                                                ContactDAO contactDAO = new ContactDAO(c);
-//                                                Contact contact = contactDAO.findById(idEMPLOYEE);
-//                                                System.out.println();
-         //                                       System.out.println(" " + mainInfo.getFirstName() +
-         //                                               " " + );
+                                                System.out.println("________________________________________________");
+                                                EmployeeDAO employeeDAO = new EmployeeDAO(c);
+                                                Employee employee = employeeDAO.findById(idEMPLOYEE);
+                                                DepartmentDAO departmentDAO = new DepartmentDAO(c);
+                                                Department department = departmentDAO.findById(employee.getIdDep());
+                                                MainInfoDAO mainInfoDAO = new MainInfoDAO(c);
+                                                MainInfo mainInfo = mainInfoDAO.findById(idEMPLOYEE);
+                                                ContactDAO contactDAO = new ContactDAO(c);
+                                                Contact contact = contactDAO.findById(idEMPLOYEE);
+                                                //JobEmployeeDAO
+                                                  // solve problem with few titles
+                                                System.out.println();
+                                                System.out.println("___ Main Info ___");
+                                                System.out.println("   Employee " + mainInfo.getFirstName() +
+                                                        " " + mainInfo.getMiddleName() + " " +
+                                                        mainInfo.getLastName() + ",");
+                                                System.out.println("   Status " + employee.getStatus());
+                                                System.out.println();
+                                                System.out.println("   №" + idEMPLOYEE);
+                                                System.out.println("");
+                                                System.out.println("_Name of department: "
+                                                        + department.getNameDep());
+                                                // add job title\titles
+                                                //System.out.println("_Job title: " + );
+                                                System.out.println("_Location____");
+                                                System.out.println("   Work place: " + mainInfo.getCabinetOffice());
+                                                System.out.println("   Street: " + contact.getLocationStreet());
+                                                System.out.println();
+                                                System.out.println("_Contact____");
+                                                System.out.println("   Work number: " + contact.getWorkNumber());
+                                                System.out.println("   Personal number: " + contact.getPersonalNumber());
+
+                                                System.out.println();
+                                                System.out.println(" Date of entry: " + mainInfo.getEntryD());
+                                                System.out.println();
+                                                System.out.println("________________________________________________");
+
+                                        // Make a log statement
                                         case "2":
 
+
+                                        // Create a task
                                         case "3":
 
+
+                                        // Create an event
                                         case "4":
 
+
+                                        // See all employees
                                         case "5":
 
 
@@ -320,3 +367,6 @@ public class EPA {
 }
 
 
+// need to do crypto on password
+// main menu with decisions what client want to do
+// create normal readme on git
