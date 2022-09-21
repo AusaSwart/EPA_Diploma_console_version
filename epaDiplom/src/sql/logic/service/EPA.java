@@ -328,6 +328,7 @@ public class EPA {
                                                 System.out.println(" Date of entry: " + mainInfo.getEntryD());
                                                 System.out.println();
                                                 System.out.println("________________________________________________");
+                                                // maybe need to add smth more?
 
                                         // Make a log statement
                                         case "2":
