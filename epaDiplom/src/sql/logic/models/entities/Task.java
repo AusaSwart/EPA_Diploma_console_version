@@ -1,7 +1,7 @@
 package sql.logic.models.entities;
 
 import sql.logic.models.util.DataTransferObject;
-import java.util.Date;
+import java.sql.Date;
 
 public class Task implements DataTransferObject {
     private long id;

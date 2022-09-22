@@ -1,5 +1,6 @@
 package sql.logic.models.DAO;
 
+import sql.logic.models.entities.Employee;
 import sql.logic.models.entities.EmployeeTask;
 import sql.logic.models.entities.Task;
 import sql.logic.models.util.DataAccessObject;
@@ -17,6 +18,20 @@ public class TaskDAO extends DataAccessObject<Task> {
     private static final String DELETE = "DELETE FROM task WHERE id = ?";
     private static final String UPDATE = "UPDATE task SET date_task = ? WHERE id = ?";
     private static final String INSERT = "INSERT INTO task (date_task) VALUES (?)";
+    private static final String GET_LAST_VALUE = "SELECT MAX(id) FROM task";
+
+    public Task findMaxIdTask(Task task) {
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_LAST_VALUE);){
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                task.setId(rs.getLong("max"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return task;
+    }
 
     public List<Task> findByIDListOfTask(long id){
         List<Task> tasks = new ArrayList<>();
