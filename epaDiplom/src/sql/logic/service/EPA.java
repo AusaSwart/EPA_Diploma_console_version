@@ -306,8 +306,8 @@ public class EPA {
                     System.out.println("     7(*) - Delete Account");
                     System.out.println("     8(*) - Correct Info in Account");
                     System.out.println("     9(*) - Block Account"); //(?)
-                    System.out.println("     0 - End Session");
                 }
+                System.out.println("     0 - End Session");
                 System.out.println();
                 System.out.println("________________________________________________");
                 decision = input.nextLine();
@@ -356,44 +356,44 @@ public class EPA {
                         System.out.println();
                         System.out.println("________________________________________________");
                         // maybe need to add smth more?
-
+                        break;
                     case "2":
 
                         // Make a log statement
-
-                        System.out.println("________________________________________________");
-                        System.out.println();
-                        System.out.println("   What type of leave do you interested in?");
-                        System.out.println("      1 - sick leave");
-                        System.out.println("      2 - vacation");
-                        System.out.println("      3 - at your own expense");
-                        System.out.println("      4 - dismissal");
-                        System.out.println("      5 - else");
+//
+//                        System.out.println("________________________________________________");
+//                        System.out.println();
+//                        System.out.println("   What type of leave do you interested in?");
+//                        System.out.println("      1 - sick leave");
+//                        System.out.println("      2 - vacation");
+//                        System.out.println("      3 - at your own expense");
+//                        System.out.println("      4 - dismissal");
+//                        System.out.println("      5 - else");
 
 
 
                     case "3":
 
                         // Create a task
-
-                        System.out.println("________________________________________________");
-                        System.out.println();
-                        System.out.println("   Lets create task. You need to write in comment" +
-                                           " what do you need");
-                        Date date = new Date(System.currentTimeMillis());
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-                        formatter.format(date);
-                        TaskDAO taskDAO = new TaskDAO(c);
-                        Task task = new Task();
-                        task.setDateTask(date);
-                        taskDAO.create(task);
-                        task = taskDAO.findMaxIdTask(task);
-                        long taskID = task.getId();
-                        System.out.println("_Task table created____");
-                        input = new Scanner(System.in);
-                        String commentForTask = input.nextLine();
-                        EmployeeTaskDAO employeeTaskDAO1 = new EmployeeTaskDAO(c);
-                        System.out.println("   Which employees need to do this task?");
+//
+//                        System.out.println("________________________________________________");
+//                        System.out.println();
+//                        System.out.println("   Lets create task. You need to write in comment" +
+//                                           " what do you need");
+//                        Date date = new Date(System.currentTimeMillis());
+//                        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+//                        formatter.format(date);
+//                        TaskDAO taskDAO = new TaskDAO(c);
+//                        Task task = new Task();
+//                        task.setDateTask(date);
+//                        taskDAO.create(task);
+//                        task = taskDAO.findMaxIdTask(task);
+//                        long taskID = task.getId();
+//                        System.out.println("_Task table created____");
+//                        input = new Scanner(System.in);
+//                        String commentForTask = input.nextLine();
+//                        EmployeeTaskDAO employeeTaskDAO1 = new EmployeeTaskDAO(c);
+//                        System.out.println("   Which employees need to do this task?");
 
 
                         // need to create task on few employees
