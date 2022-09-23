@@ -1,12 +1,14 @@
 package sql.logic.models.DAO;
 
 import sql.logic.models.entities.Employee;
+import sql.logic.models.entities.EmployeeTask;
 import sql.logic.models.util.DataAccessObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAO extends DataAccessObject<Employee> {
@@ -16,6 +18,7 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
     }
     private static final String GET_ONE = "SELECT id, privilege, status, id_dep " +
             "FROM employee WHERE id=?";
+    private static final String GET_ONE_BY_ONE = "SELECT * FROM employee";
     private static final String DELETE = "DELETE FROM employee WHERE id = ?";
     private static final String UPDATE = "UPDATE employee SET privilege = ?, status = ?," +
             "id_dep = ? WHERE id = ?";
@@ -34,6 +37,25 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
             throw new RuntimeException(e);
         }
         return employee;
+    }
+
+    public List<Employee> findAllInList(){
+        List<Employee> employees = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE_BY_ONE);){
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                Employee employee = new Employee();
+                employee.setId(rs.getLong("id"));
+                employee.setPrivilege(rs.getInt("privilege"));
+                employee.setStatus(rs.getInt("status"));
+                employee.setIdDep(rs.getLong("id_dep"));
+                employees.add(employee);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return employees;
     }
 
     @Override

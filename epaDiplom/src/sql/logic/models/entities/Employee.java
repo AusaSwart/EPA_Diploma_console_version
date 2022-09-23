@@ -42,12 +42,12 @@ public class Employee implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("employee {");
-        sb.append("id=").append(id);
-        sb.append(", privilege='").append(privilege).append('\'');
-        sb.append(", status='").append(status).append('\'');
-        sb.append(", id_dep='").append(id_dep).append('\'');
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder(" Employee №");
+        sb.append(" ").append(id);
+        sb.append("\n privilege ").append(privilege);
+        sb.append("\n status ").append(status);
+        sb.append("\n id of department ").append(id_dep);
+        sb.append("\n ");
         return sb.toString();
     }
 }

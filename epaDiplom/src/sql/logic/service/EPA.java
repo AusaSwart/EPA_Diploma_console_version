@@ -97,8 +97,6 @@ public class EPA {
                     } while (!correct);
 
                     System.out.println("   We are done with the entrance");
-                    System.out.println("________________________________________________________");
-                    System.out.println();
                     done = true;
 
                 }
@@ -114,7 +112,7 @@ public class EPA {
                     String loginUser;
                     boolean check = false;
 
-                    // check login, if doesn't exist => create new account
+                    // check login, if it doesn't exist => create new account
 
                     do {
                         loginUser = input.nextLine();
@@ -195,6 +193,8 @@ public class EPA {
                 }
             } while (!done);
 
+
+
             //Show tasks, connected with this login
 
             System.out.println("________________________________________________");
@@ -206,6 +206,11 @@ public class EPA {
             System.out.println();
 //__________(!) need to do additional list of table task, connected with this (emp_task) through id of task
             // n do check on existing tasks
+
+
+
+
+
             System.out.println("________________________________________________");
             System.out.println();
 
@@ -355,52 +360,53 @@ public class EPA {
                         System.out.println("_Date of entry: " + mainInfo.getEntryD());
                         System.out.println();
                         System.out.println("________________________________________________");
-                        // maybe need to add smth more?
                         break;
+
                     case "2":
 
                         // Make a log statement
-//
-//                        System.out.println("________________________________________________");
-//                        System.out.println();
-//                        System.out.println("   What type of leave do you interested in?");
-//                        System.out.println("      1 - sick leave");
-//                        System.out.println("      2 - vacation");
-//                        System.out.println("      3 - at your own expense");
-//                        System.out.println("      4 - dismissal");
-//                        System.out.println("      5 - else");
+
+                        System.out.println("________________________________________________");
+                        System.out.println();
+                        System.out.println("   What type of leave do you interested in?");
+                        System.out.println("      1 - sick leave");
+                        System.out.println("      2 - vacation");
+                        System.out.println("      3 - at your own expense");
+                        System.out.println("      4 - dismissal");
+                        System.out.println("      5 - else");
 
 
+                        break;
 
                     case "3":
 
                         // Create a task
-//
-//                        System.out.println("________________________________________________");
-//                        System.out.println();
-//                        System.out.println("   Lets create task. You need to write in comment" +
-//                                           " what do you need");
-//                        Date date = new Date(System.currentTimeMillis());
-//                        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-//                        formatter.format(date);
-//                        TaskDAO taskDAO = new TaskDAO(c);
-//                        Task task = new Task();
-//                        task.setDateTask(date);
-//                        taskDAO.create(task);
-//                        task = taskDAO.findMaxIdTask(task);
-//                        long taskID = task.getId();
-//                        System.out.println("_Task table created____");
-//                        input = new Scanner(System.in);
-//                        String commentForTask = input.nextLine();
-//                        EmployeeTaskDAO employeeTaskDAO1 = new EmployeeTaskDAO(c);
-//                        System.out.println("   Which employees need to do this task?");
+
+                        System.out.println("________________________________________________");
+                        System.out.println();
+                        System.out.println("   Lets create task. You need to write in comment" +
+                                           " what do you need");
+                        Date date = new Date(System.currentTimeMillis());
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+                        formatter.format(date);
+                        TaskDAO taskDAO = new TaskDAO(c);
+                        Task task = new Task();
+                        task.setDateTask(date);
+                        taskDAO.create(task);
+                        task = taskDAO.findMaxIdTask(task);
+                        long taskID = task.getId();
+                        System.out.println("_Task table created____");
+                        input = new Scanner(System.in);
+                        String commentForTask = input.nextLine();
+                        EmployeeTaskDAO employeeTaskDAO1 = new EmployeeTaskDAO(c);
+                        //System.out.println("   Which employees need to do this task?");
 
 
                         // need to create task on few employees
 
 
 
-
+                        break;
 
                     case "4":
 
@@ -412,20 +418,31 @@ public class EPA {
 
                         // See all employees
 
-
+                        System.out.println("________________________________________________");
+                        System.out.println();
+                        System.out.println("   There is list of all employees :");
+                        System.out.println();
+                        EmployeeDAO employeeDAO3 = new EmployeeDAO(c);
+                        List<Employee> employees = employeeDAO3.findAllInList();
+                        employees.forEach(System.out::println);
+                        System.out.println();
+                        System.out.println("   This is end of list");
+                        System.out.println();
+                        break;
 
                     case "6":
 
                         // Update info about personal account
 
 
-
+                        break;
 
                     case "7":
 
                         // Delete employee's account (Admin)
 
                         System.out.println("________________________________________________");
+                        System.out.println();
                         System.out.println("   Choose what employee you want to delete?");
                         input = new Scanner(System.in);
                         long deleteEmployee = input.nextLong();
@@ -451,18 +468,26 @@ public class EPA {
                             System.out.println("   Okay");
                             break;
                         }
+                        break;
 
                     case "8":
 
                         // Correct Info in employee's account (Admin)
 
+                        System.out.println("________________________________________________");
+                        System.out.println();
+                        System.out.println("   ");
 
+
+
+                        break;
 
                     case "9":
 
                         // Block employee's account (Admin)
 
                         System.out.println("________________________________________________");
+                        System.out.println();
                         System.out.println("   Whose account you want to block?");
                         input = new Scanner(System.in);
                         long blockEmployee = input.nextLong();
@@ -485,6 +510,7 @@ public class EPA {
                                     blockEmployee +
                                     " have been blocked");
                         } else System.out.println("   Okay");
+                        break;
                 }
 
                 // Exit from app
@@ -509,5 +535,8 @@ public class EPA {
 
 
 // need to do crypto on password
-// main menu with decisions what client want to do
+// main menu with decisions what client want to do (cases)
+// log statement and approve
+// more info with task
+// more info with log
 // create normal readme on git
