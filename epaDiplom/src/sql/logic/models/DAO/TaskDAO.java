@@ -33,24 +33,6 @@ public class TaskDAO extends DataAccessObject<Task> {
         return task;
     }
 
-    public List<Task> findByIDListOfTask(long id){
-        List<Task> tasks = new ArrayList<>();
-        try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE);){
-            statement.setLong(1, id);
-            ResultSet rs = statement.executeQuery();
-            while(rs.next()){
-                Task task = new Task();
-                task.setId(rs.getLong("id"));
-                task.setDateTask(rs.getDate("date_task"));
-                tasks.add(task);
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        return tasks;
-    }
-
     @Override
     public Task findById(long id) {
         Task task = new Task();

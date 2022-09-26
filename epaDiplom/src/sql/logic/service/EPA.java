@@ -132,14 +132,13 @@ public class EPA {
                     String passwordUser = input.nextLine();
                     System.out.println();
 
-                    //put it into DB
+                    // put it into DB
                     // create employee table
 
                     EmployeeDAO employeeDAO = new EmployeeDAO(c);
                     Employee employee = new Employee();
-                    employee.setStatus(1);
-                    employee.setPrivilege(0);
-                    employee.setIdDep(0);
+                    employee.setPrivilege(2);  // 2 - for common users, this can be changed only by admin
+                    employee.setIdDep(0);    // 0 - for new employees, after they change it by themselves
                     employeeDAO.create(employee);
                     employeeDAO = new EmployeeDAO(c);
                     employee = new Employee();
@@ -193,110 +192,56 @@ public class EPA {
                 }
             } while (!done);
 
-
-
             //Show tasks, connected with this login
 
-            System.out.println("________________________________________________");
-            System.out.println();
-            System.out.println("   Today's tasks :");
             EmployeeTaskDAO employeeTaskDAO = new EmployeeTaskDAO(c);
-            System.out.println();
-            employeeTaskDAO.findByIDList(idEMPLOYEE).forEach(System.out::println);
-            System.out.println();
-//__________(!) need to do additional list of table task, connected with this (emp_task) through id of task
-            // n do check on existing tasks
-
-
-
-
-
-            System.out.println("________________________________________________");
-            System.out.println();
+            EmployeeTask employeeTask2 = employeeTaskDAO.findById(idEMPLOYEE);
+            long idT = employeeTask2.getIdTask();
+            if(idT != 0) {
+                System.out.println("________________________________________________");
+                System.out.println();
+                System.out.println("   Today's tasks :");
+                System.out.println();
+                EmployeeTask employeeTask = employeeTaskDAO.findComplicatedReq(idEMPLOYEE);
+                for (int i = 0; i < employeeTask.getEmployeeTasks().size(); i++) {
+                    System.out.println(employeeTask.getEmployeeTasks().get(i));
+                    System.out.println(employeeTask.getTasks().get(i));
+                }
+            }
 
             // events, connected with this login
 
             NoticeEventDAO noticeEventDAO = new NoticeEventDAO(c);
-            noticeEventDAO.findByIdList(idEMPLOYEE).forEach(System.out::println);
-//__________(!) need to do additional list for Event, n connect with id of recipient
-            // n check on existing event
+            NoticeEvent noticeEvent = noticeEventDAO.findById(idEMPLOYEE);
+            idT = noticeEvent.getIdEvent();
+            if(idT != 0) {
+                System.out.println("________________________________________________");
+                System.out.println();
+                noticeEventDAO.findByIdList(idEMPLOYEE).forEach(System.out::println);
+                NoticeEvent noticeEvent1 = noticeEventDAO.findComplicatedReqFE(idEMPLOYEE);
+                for (int i = 0; i <  0  ; i++ ){
+                    System.out.println();
+                    System.out.println();
+                }
+            }
 
 
-            // old part, but work correctly
-//                        System.out.println("   Today's events for you :");
-//                        stmt = c.createStatement();
-//                        tmp = "SELECT id_event FROM public.notice_event WHERE id_recipient='"
-//                                + idEMPLOYEE + "';";
-//                        rs = stmt.executeQuery(tmp);
-//                        int idEvent = 0;
-//                        while (rs.next()) {
-//                                idEvent = rs.getInt("id_event");
-//                        }
-//                        if (idEvent != 0){
-//                                tmp = "SELECT date_of_event, type_of_event, comment_fe FROM public.event WHERE id='"
-//                                        + idEvent + "';";
-//                                rs = stmt.executeQuery(tmp);
-//                                while (rs.next()) {
-//                                        Date dateOfEvent = rs.getDate("date_of_event");
-//                                        String typeOfEvent = rs.getString("type_of_event");
-//                                        String commentFE = rs.getString("comment_fe");
-//                                        System.out.println("   Event is: " + typeOfEvent);
-//                                        System.out.println("   Date: " + dateOfEvent);
-//                                        System.out.println("   Comment: " + commentFE);
-//                                        System.out.println();
-//                                }
-//                        } else System.out.println("   There is no events");
-            System.out.println("________________________________________________");
 
 
 //__________(!) create log statements, check on existing and connection with table documents
             // also do types of leave n approve from recipient
-            System.out.println();
-
-
-            // old part, but work correctly
-//                        stmt = c.createStatement();
-//                        tmp = "SELECT id, id_employee, type_leave, date_leave, days_sum, date_of_ls,"
-//                                + "comment_ls, approve FROM public.log_statement WHERE id_approver ="
-//                                + idEMPLOYEE + ";";
-//                        rs = stmt.executeQuery(tmp);
-//                        int approveFromApr = 0;
-//        //                int idLS = 0;
-//                        int idEmployee = 0;
-//                        while (rs.next()) {
-//      //                          idLS = rs.getInt("id");
-//                                idEmployee = rs.getInt("id_employee");
-//                                int typeLeave = rs.getInt("type_leave");
-//                                int sumOfDays = rs.getInt("days_sum");
-//                                int approve = rs.getInt("approve");
-//                                Date dateLeave = rs.getDate("date_leave");
-//                                Date dateOfLS = rs.getDate("date_of_ls");
-//                                String commentLS = rs.getString("comment_ls");
-//                                approveFromApr = approve;
-//                                if (approveFromApr == 3) {
-//                                        System.out.println("   You need to see this statement's:");
-//                                        System.out.println("   This employee " + idEmployee + " wants to go on:");
-//                                        if (typeLeave == 1) System.out.printf("    vacation ");
-//                                        else if (typeLeave == 2) System.out.printf("   sick leave ");
-//                                        else if (typeLeave == 3) System.out.printf("   at own expense ");
-//                                        else if (typeLeave == 4) System.out.printf("   another ");
-//                                        else if (typeLeave == 5) System.out.printf("   leave ");
-//                                        System.out.println(dateLeave);
-//                                        if (typeLeave <5) System.out.println("   for " + sumOfDays + " days");
-//                                        System.out.println("   Day of statement: " + dateOfLS);
-//                                        System.out.println("   Comment: " + commentLS);
-//                                        System.out.println();
-//                                        }
-//                        }
-
-            //approve LS
-
-
             System.out.println("________________________________________________");
             System.out.println();
 
+
+
+
+            //approve LS
+
             // Main menu with available actions
 
+            System.out.println("________________________________________________");
+            System.out.println();
             do {
                 System.out.println("________Main menu________");
                 System.out.println();
@@ -341,7 +286,6 @@ public class EPA {
                         System.out.println("_Employee " + mainInfo.getFirstName() +
                                 " " + mainInfo.getMiddleName() + " " +
                                 mainInfo.getLastName() + ",");
-                        System.out.println("_Status " + employee.getStatus());
                         System.out.println();
                         System.out.println("   №" + idEMPLOYEE);
                         System.out.println("");
@@ -389,12 +333,12 @@ public class EPA {
                         Date date = new Date(System.currentTimeMillis());
                         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
                         formatter.format(date);
-                        TaskDAO taskDAO = new TaskDAO(c);
-                        Task task = new Task();
-                        task.setDateTask(date);
-                        taskDAO.create(task);
-                        task = taskDAO.findMaxIdTask(task);
-                        long taskID = task.getId();
+                        TaskDAO taskDAO1 = new TaskDAO(c);
+                        Task task1 = new Task();
+                        task1.setDateTask(date);
+                        taskDAO1.create(task1);
+                        task1 = taskDAO1.findMaxIdTask(task1);
+                        long taskID = task1.getId();
                         System.out.println("_Task table created____");
                         input = new Scanner(System.in);
                         String commentForTask = input.nextLine();
@@ -502,7 +446,6 @@ public class EPA {
                             EmployeeDAO employeeDAO1 = new EmployeeDAO(c);
                             Employee employee1 = employeeDAO1.findById(blockEmployee);
                             employee1.setPrivilege(0);
-                            employee1.setStatus(employee1.getStatus());
                             employee1.setIdDep(employee1.getIdDep());
                             employee1.setId(blockEmployee);
                             employeeDAO1.update(employee1);
@@ -532,11 +475,3 @@ public class EPA {
 
     }
 }
-
-
-// need to do crypto on password
-// main menu with decisions what client want to do (cases)
-// log statement and approve
-// more info with task
-// more info with log
-// create normal readme on git

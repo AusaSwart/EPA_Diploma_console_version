@@ -2,11 +2,11 @@ package sql.logic.models.entities;
 
 import sql.logic.models.util.DataTransferObject;
 import java.sql.Date;
+import java.util.List;
 
 public class Task implements DataTransferObject {
     private long id;
     private Date date_task;
-
     public long getId() {
         return id;
     }
@@ -22,10 +22,10 @@ public class Task implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("   Task {");
+        final StringBuilder sb = new StringBuilder(" ");
         sb.append("№ ").append(id);
-        sb.append("\n Date of task: '").append(date_task).append('\'');
-        sb.append('}');
+        sb.append("\n   Date of task: '").append(date_task).append('\'');
+        sb.append("\n");
         return sb.toString();
     }
 }

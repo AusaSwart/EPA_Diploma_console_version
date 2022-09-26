@@ -16,15 +16,16 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
     public EmployeeDAO(Connection connection) {
         super(connection);
     }
-    private static final String GET_ONE = "SELECT id, privilege, status, id_dep " +
+    private static final String GET_ONE = "SELECT id, privilege, id_dep " +
             "FROM employee WHERE id=?";
     private static final String GET_ONE_BY_ONE = "SELECT * FROM employee";
     private static final String DELETE = "DELETE FROM employee WHERE id = ?";
-    private static final String UPDATE = "UPDATE employee SET privilege = ?, status = ?," +
+    private static final String UPDATE = "UPDATE employee SET privilege = ?, " +
             "id_dep = ? WHERE id = ?";
-    private static final String INSERT = "INSERT INTO employee (privilege, status, id_dep)" +
-            "VALUES (?, ?, ?)";
+    private static final String INSERT = "INSERT INTO employee (privilege, id_dep)" +
+            "VALUES (?, ?)";
     private static final String GET_LAST_VALUE = "SELECT MAX(id) FROM employee";
+
 
     public Employee findMaxIdEmp(Employee employee) {
         try(PreparedStatement statement = this.connection.prepareStatement(GET_LAST_VALUE);){
@@ -47,7 +48,6 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
                 Employee employee = new Employee();
                 employee.setId(rs.getLong("id"));
                 employee.setPrivilege(rs.getInt("privilege"));
-                employee.setStatus(rs.getInt("status"));
                 employee.setIdDep(rs.getLong("id_dep"));
                 employees.add(employee);
             }
@@ -67,7 +67,6 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
             while(rs.next()){
                 employee.setId(rs.getLong("id"));
                 employee.setPrivilege(rs.getInt("privilege"));
-                employee.setStatus(rs.getInt("status"));
                 employee.setIdDep(rs.getLong("id_dep"));
             }
         }catch (SQLException e){
@@ -93,9 +92,8 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
         }
         try(PreparedStatement statement = this.connection.prepareStatement(UPDATE);){
             statement.setInt(1, dto.getPrivilege());
-            statement.setInt(2, dto.getStatus());
-            statement.setLong(3, dto.getIdDep());
-            statement.setLong(4, dto.getId());
+            statement.setLong(2, dto.getIdDep());
+            statement.setLong(3, dto.getId());
             statement.execute();
             this.connection.commit();
             employee = this.findById(dto.getId());
@@ -117,8 +115,7 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
         Employee employee = null;
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setInt(1, dto.getPrivilege());
-            statement.setInt(2, dto.getStatus());
-            statement.setLong(3, dto.getIdDep());
+            statement.setLong(2, dto.getIdDep());
             statement.execute();
             this.connection.commit();
             employee = this.findById(dto.getId());

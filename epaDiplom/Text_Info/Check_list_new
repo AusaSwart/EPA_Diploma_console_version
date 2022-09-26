@@ -1,0 +1,27 @@
+- check privilege in login
+
+- connect task 'n emp_task  (done)
+
+- check on existing tasks   (done)
+
+- crypto passwords
+
+- connect event n' notice_event
+
+- check on existing of events
+
+- if privileges fit, then show requests from LS
+- make mechanism of approving logs
+
+  CASES
+
+  "1" - pull up job title
+  "2" - creating LS
+  "3" - choose recipient(s) (few)
+  "4" - creating of event
+  "5" - pull up more info of employees from another tables
+  "6" - update info on your own page
+  "8" - update info of employee (admin), but first => show all info, that we have
+
+- readme on git - fix
+- fix commits
