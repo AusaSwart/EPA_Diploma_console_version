@@ -31,11 +31,11 @@ public class Document implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("document{");
-        sb.append("id=").append(id);
-        sb.append(", id_ls='").append(id_ls).append('\'');
-        sb.append(", body_doc='").append(body_doc).append('\'');
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("___document ");
+        sb.append(" № ").append(id);
+        sb.append("___\n For № ").append(id_ls);
+        sb.append(" of statement\n Path to doc '").append(body_doc).append('\'');
+        sb.append("\n");
         return sb.toString();
     }
 }

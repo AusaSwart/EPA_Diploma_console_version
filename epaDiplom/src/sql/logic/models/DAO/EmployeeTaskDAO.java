@@ -32,7 +32,6 @@ public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
 
     public EmployeeTask findComplicatedReq(long id) {
         EmployeeTask employeeTask = new EmployeeTask();
-        Task task = new Task();
         try(PreparedStatement statement = this.connection.prepareStatement(GET_COMPLICATED);){
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
@@ -40,14 +39,14 @@ public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
             List<Task> tasks = new ArrayList<>();
             while(rs.next()){
                 EmployeeTask employeeTask1 = new EmployeeTask();
-                Task task1 = new Task();
+                Task task = new Task();
                 employeeTask1.setId(rs.getLong(1));
                 employeeTask1.setCommentTE(rs.getString(2));
                 employeeTask1.setIdEmployee(rs.getLong(3));
                 employeeTask1.setIdTask(rs.getLong(4));
-                task1.setId(rs.getLong("id_task"));
-                task1.setDateTask(rs.getDate(5));
-                tasks.add(task1);
+                task.setId(rs.getLong("id_task"));
+                task.setDateTask(rs.getDate(5));
+                tasks.add(task);
                 employeeTasks.add(employeeTask1);
             }
             employeeTask.setTasks(tasks);

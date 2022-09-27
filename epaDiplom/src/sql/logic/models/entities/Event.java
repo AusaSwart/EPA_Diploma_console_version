@@ -39,11 +39,11 @@ public class Event implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("  Event");
-        sb.append(" id is ").append(id);
-        sb.append("\n Type of event: '").append(type_of_event).append('\'');
-        sb.append("\n comment: '").append(comment_fe).append('\'');
-        sb.append("\n date of event: ").append(date_of_event);
+        final StringBuilder sb = new StringBuilder("|_Event__");
+        sb.append(" № ").append(id);
+        sb.append("_|\n Type of event: '").append(type_of_event).append('\'');
+        sb.append("\n Comment: '").append(comment_fe).append('\'');
+        sb.append("\n Date of event: ").append(date_of_event);
         sb.append("\n");
         return sb.toString();
     }

@@ -24,7 +24,7 @@ public class Task implements DataTransferObject {
     public String toString() {
         final StringBuilder sb = new StringBuilder(" ");
         sb.append("№ ").append(id);
-        sb.append("\n   Date of task: '").append(date_task).append('\'');
+        sb.append("   Date of task: '").append(date_task).append('\'');
         sb.append("\n");
         return sb.toString();
     }

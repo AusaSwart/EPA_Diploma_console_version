@@ -18,7 +18,7 @@ public class EPA {
 
     public static void main(String[] args) {
 
-        // connection to DB
+        // Connection to DB
 
         DBConnectionManager dcm = new DBConnectionManager("127.0.0.1:5432",
                 "EPA", "postgres", "123qwe");
@@ -28,7 +28,7 @@ public class EPA {
         long idEMPLOYEE = 0;
         int privilege = 0;
 
-        // privilege description
+        // Privilege description
         // 0 - account blocked (can't do anything)
         // 1 - admin (can manipulate with another accounts)
         // 2 - common user (can manipulate only own account)
@@ -36,14 +36,14 @@ public class EPA {
 
         try {
 
-            // part with connection to DB
+            // Part with connection to DB
 
             Connection c = dcm.getConnection();
             c.setAutoCommit(false);
             System.out.println("   Connected to the database!");
             System.out.println("________________________________________________");
 
-            // employee greetings
+            // Employee greetings
 
             System.out.println("________Hello, Employee. Present yourself________");
             System.out.println("   Please, tape : \n   1 - If you are already have login;");
@@ -52,13 +52,13 @@ public class EPA {
 
             boolean done = false;
 
-            // first step: login or registration
+            // First step: login or registration
 
             Scanner input = new Scanner(System.in);
             String decision;
             do {
 
-                // login (already have an account)
+                // Login (already have an account)
 
                 decision = input.nextLine();
                 if (decision.equals("1")) {
@@ -83,7 +83,7 @@ public class EPA {
                         if (idEMPLOYEE == 0) {
                             System.out.println("Incorrect, try again");
                         } else {
-                            System.out.println("   Hello employee № " + idEMPLOYEE);
+                            System.out.println("+++++ Hello, new employee №" + idEMPLOYEE + " +++++");
                             System.out.println();
                             if (privilege == 0) {
                                 System.out.println();
@@ -96,12 +96,12 @@ public class EPA {
                         }
                     } while (!correct);
 
-                    System.out.println("   We are done with the entrance");
+                    System.out.println("|___We are done with the entrance___|");
                     done = true;
 
                 }
 
-                // register (doesn't have an account)
+                // Register (doesn't have an account)
 
                 else if (decision.equals("2")) {
                     System.out.println("________Lets create your account________");
@@ -112,7 +112,7 @@ public class EPA {
                     String loginUser;
                     boolean check = false;
 
-                    // check login, if it doesn't exist => create new account
+                    // Check login, if it doesn't exist => create new account
 
                     do {
                         loginUser = input.nextLine();
@@ -132,8 +132,8 @@ public class EPA {
                     String passwordUser = input.nextLine();
                     System.out.println();
 
-                    // put it into DB
-                    // create employee table
+                    // Put it into DB
+                    // Create employee table
 
                     EmployeeDAO employeeDAO = new EmployeeDAO(c);
                     Employee employee = new Employee();
@@ -148,7 +148,7 @@ public class EPA {
                     System.out.println("___Employee table created___");
                     System.out.println();
 
-                    // create main info table
+                    // Create main info table
 
                     MainInfoDAO mainInfoDAO = new MainInfoDAO(c);
                     MainInfo mainInfo = new MainInfo();
@@ -171,7 +171,7 @@ public class EPA {
                     System.out.println("___Main info table created___");
                     System.out.println();
 
-                    // create login table
+                    // Create login table
 
                     LoginDAO loginDAO = new LoginDAO(c);
                     Login login = new Login();
@@ -182,9 +182,9 @@ public class EPA {
                     System.out.println("___Login created___");
                     System.out.println();
 
-                    System.out.println("   Hello, new employee №" + idEMPLOYEE);
+                    System.out.println("+++++ Hello, new employee №" + idEMPLOYEE + " +++++");
                     System.out.println();
-                    System.out.println("   We're done with registration");
+                    System.out.println("|__ We're done with registration __|");
                     done = true;
                 } else {
                     System.out.println("   Incorrect decision!! Try again");
@@ -192,24 +192,24 @@ public class EPA {
                 }
             } while (!done);
 
-            //Show tasks, connected with this login
+            // Show tasks, connected with this login
 
             EmployeeTaskDAO employeeTaskDAO = new EmployeeTaskDAO(c);
-            EmployeeTask employeeTask2 = employeeTaskDAO.findById(idEMPLOYEE);
-            long idT = employeeTask2.getIdTask();
+            EmployeeTask employeeTask = employeeTaskDAO.findById(idEMPLOYEE);
+            long idT = employeeTask.getIdTask();
             if(idT != 0) {
                 System.out.println("________________________________________________");
                 System.out.println();
                 System.out.println("   Today's tasks :");
                 System.out.println();
-                EmployeeTask employeeTask = employeeTaskDAO.findComplicatedReq(idEMPLOYEE);
+                employeeTask = employeeTaskDAO.findComplicatedReq(idEMPLOYEE);
                 for (int i = 0; i < employeeTask.getEmployeeTasks().size(); i++) {
                     System.out.println(employeeTask.getEmployeeTasks().get(i));
                     System.out.println(employeeTask.getTasks().get(i));
                 }
             }
 
-            // events, connected with this login
+            // Events, connected with this login
 
             NoticeEventDAO noticeEventDAO = new NoticeEventDAO(c);
             NoticeEvent noticeEvent = noticeEventDAO.findById(idEMPLOYEE);
@@ -217,30 +217,59 @@ public class EPA {
             if(idT != 0) {
                 System.out.println("________________________________________________");
                 System.out.println();
-                noticeEventDAO.findByIdList(idEMPLOYEE).forEach(System.out::println);
-                NoticeEvent noticeEvent1 = noticeEventDAO.findComplicatedReqFE(idEMPLOYEE);
-                for (int i = 0; i <  0  ; i++ ){
-                    System.out.println();
-                    System.out.println();
+                noticeEvent = noticeEventDAO.findComplicatedReqFE(idEMPLOYEE);
+                for (int i = 0; i < (noticeEvent.getNoticeEvents().size()) ; i++ ){
+                    System.out.println(noticeEvent.getNoticeEvents().get(i));
+                    System.out.println(noticeEvent.getEvents().get(i));
                 }
             }
 
+            // Log statement approves n' notices about them
 
+            // 1 - approved
+            // 2 - dismiss
+            // 3 - need answer
 
+            LogStatementDAO logStatementDAO = new LogStatementDAO(c);
+            LogStatement logStatement = logStatementDAO.findById(idEMPLOYEE);
+            idT = logStatement.getId();
+            if(idT != 0 ) {
+                System.out.println("________________________________________________");
+                System.out.println();
+                boolean doe;
+                logStatement = logStatementDAO.findComplicatedReqLS(idEMPLOYEE);
+                for (int i = 0; i < (logStatement.getLogStatements().size()) ; i++ ){
+                    System.out.println(logStatement.getLogStatements().get(i));
+                    System.out.println(logStatement.getDocuments().get(i));
 
-//__________(!) create log statements, check on existing and connection with table documents
-            // also do types of leave n approve from recipient
-            System.out.println("________________________________________________");
-            System.out.println();
+                    // Approve this statement
+                    doe = false;
+                    do {
+                        System.out.println("   Approve this statement? y/n");
+                        decision = input.nextLine();
+                        if (decision.equals("y")) {
+                            LogStatement logStatement1 = logStatementDAO.findByIdForApprove(idEMPLOYEE);
+                            logStatement1.setApprove(1); // yes
+                            logStatementDAO.updateApprove(logStatement1);
+                            System.out.println("   Done");
+                            doe = true;
+                        } else if (decision.equals("n")) {
+                            logStatementDAO.findByIdForApprove(idEMPLOYEE);
+                            LogStatement logStatement1 = logStatementDAO.findByIdForApprove(idEMPLOYEE);
+                            logStatement1.setApprove(2); // no
+                            logStatementDAO.updateApprove(logStatement1);
+                            System.out.println("   Done");
+                            doe = true;
+                        } else System.out.println(" Incorrect, try again");
 
-
-
-
-            //approve LS
+                    } while (!doe);
+                }
+            }
 
             // Main menu with available actions
 
             System.out.println("________________________________________________");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.println();
             do {
                 System.out.println("________Main menu________");
@@ -281,7 +310,7 @@ public class EPA {
                         ContactDAO contactDAO = new ContactDAO(c);
                         Contact contact = contactDAO.findById(idEMPLOYEE);
                         //JobEmployeeDAO
-//______________________(!) solve problem with few tables
+
                         System.out.println("___ Main Info ___");
                         System.out.println("_Employee " + mainInfo.getFirstName() +
                                 " " + mainInfo.getMiddleName() + " " +
@@ -461,7 +490,7 @@ public class EPA {
             } while (!decision.equals("0"));
 
             System.out.println();
-            System.out.println("________Have a nice day________");
+            System.out.println("|________Have a nice day________|");
             System.out.println("________________________________________________");
 
             //  Block of exceptions

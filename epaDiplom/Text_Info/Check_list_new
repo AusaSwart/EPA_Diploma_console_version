@@ -1,4 +1,4 @@
-- check privilege in login
+- check privilege
 
 - connect task 'n emp_task  (done)
 
@@ -6,12 +6,12 @@
 
 - crypto passwords
 
-- connect event n' notice_event
+- connect event n' notice_event (done)
 
-- check on existing of events
+- check on existing of events  (done)
 
-- if privileges fit, then show requests from LS
-- make mechanism of approving logs
+- if privileges fit, then show requests from LS (done)
+- make mechanism of approving logs  (done)
 
   CASES
 

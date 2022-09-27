@@ -26,31 +26,31 @@ public class NoticeEventDAO extends DataAccessObject<NoticeEvent> {
             "JOIN public.event e ON ne.id_event = e.id WHERE id_recipient = ? ";
     public NoticeEvent findComplicatedReqFE(long id) {
         NoticeEvent noticeEvent = new NoticeEvent();
-        Event event = new Event();
         try(PreparedStatement statement = this.connection.prepareStatement(GET_COMPLICATED_FE);){
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
             List<NoticeEvent> noticeEvents = new ArrayList<>();
             List<Event> events = new ArrayList<>();
             while(rs.next()){
-                EmployeeTask employeeTask1 = new EmployeeTask();
-                Task task1 = new Task();
-                employeeTask1.setId(rs.getLong(1));
-                employeeTask1.setCommentTE(rs.getString(2));
-                employeeTask1.setIdEmployee(rs.getLong(3));
-                employeeTask1.setIdTask(rs.getLong(4));
-                task1.setId(rs.getLong("id_task"));
-                task1.setDateTask(rs.getDate(5));
-                tasks.add(task1);
-                employeeTasks.add(employeeTask1);
+                NoticeEvent noticeEvent1 = new NoticeEvent();
+                Event event = new Event();
+                noticeEvent1.setId(rs.getLong(1));
+                noticeEvent1.setIdEmployee(rs.getLong(2));
+                noticeEvent1.setIdEvent(rs.getLong(3));
+                event.setId(rs.getLong("id_event"));
+                event.setTypeOfEvent(rs.getString(4));
+                event.setDateOfEvent(rs.getDate(5));
+                event.setCommentFE(rs.getString(6));
+                events.add(event);
+                noticeEvents.add(noticeEvent1);
             }
-            employeeTask.setTasks(tasks);
-            employeeTask.setEmployeeTasks(employeeTasks);
+            noticeEvent.setNoticeEvents(noticeEvents);
+            noticeEvent.setEvents(events);
         }catch (SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return employeeTask;
+        return noticeEvent;
     }
 
     public List<NoticeEvent> findByIdList(long id){
