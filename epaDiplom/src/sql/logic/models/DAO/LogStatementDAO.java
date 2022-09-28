@@ -28,6 +28,8 @@ public class LogStatementDAO extends DataAccessObject<LogStatement> {
     private static final String GET_ONE_APPR = "SELECT id, id_approver, approve FROM log_statement " +
             "WHERE id_approver = ? AND approve = 3 ORDER BY id DESC";
     private static final String UPDATE_APPROVE = "UPDATE log_statement SET approve = ?  WHERE id = ?";
+    private static final String GET_ID_FROM_DATE = "SELECT MAX(id) FROM log_statement WHERE" +
+            " id_employee = ? AND date_of_ls = ?";
 
     public LogStatement findComplicatedReqLS(long id) {
         LogStatement logStatement = new LogStatement();
@@ -64,6 +66,21 @@ public class LogStatementDAO extends DataAccessObject<LogStatement> {
         return logStatement;
     }
 
+    public LogStatement getIDLS(long idLS, java.sql.Date date, long idEMPLOYEE) {
+        LogStatement logStatement = new LogStatement();
+        try (PreparedStatement statement = this.connection.prepareStatement(GET_ID_FROM_DATE);) {
+            statement.setLong(1, idEMPLOYEE);
+            statement.setDate(2, date);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                logStatement.setId(rs.getLong("max"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return logStatement;
+    }
     public LogStatement findByIdForApprove(long id_approver) {
         LogStatement logStatement = new LogStatement();
         try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE_APPR);) {
@@ -87,9 +104,7 @@ public class LogStatementDAO extends DataAccessObject<LogStatement> {
         try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE);) {
             statement.setLong(1, id_approver);
             ResultSet rs = statement.executeQuery();
-            List<LogStatement> logStatements = new ArrayList<>();
             while (rs.next()) {
-                LogStatement logStatement1 = new LogStatement();
                 logStatement.setId(rs.getLong("id"));
                 logStatement.setIdApprover(rs.getLong("id_approver"));
                 logStatement.setIdEmployee(rs.getLong("id_employee"));
@@ -99,9 +114,7 @@ public class LogStatementDAO extends DataAccessObject<LogStatement> {
                 logStatement.setApprove(rs.getInt("approve"));
                 logStatement.setDateLeave(rs.getDate("date_leave"));
                 logStatement.setDateOfLs(rs.getDate("date_of_ls"));
-                logStatements.add(logStatement1);
             }
-            logStatement.setLogStatements(logStatements);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -124,12 +137,6 @@ public class LogStatementDAO extends DataAccessObject<LogStatement> {
             this.connection.commit();
             logStatement = this.findById(dto.getId());
         } catch (SQLException e) {
-            try {
-                this.connection.rollback();
-            } catch (SQLException sqle) {
-                e.printStackTrace();
-                throw new RuntimeException(sqle);
-            }
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -178,6 +185,7 @@ public class LogStatementDAO extends DataAccessObject<LogStatement> {
 
     @Override
     public LogStatement create(LogStatement dto) {
+        LogStatement logStatement = null;
         try (PreparedStatement statement = this.connection.prepareStatement(INSERT);) {
             statement.setLong(1, dto.getIdApprover());
             statement.setLong(2, dto.getIdEmployee());
@@ -188,12 +196,13 @@ public class LogStatementDAO extends DataAccessObject<LogStatement> {
             statement.setDate(7, (Date) dto.getDateLeave());
             statement.setDate(8, (Date) dto.getDateOfLs());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+            this.connection.commit();
+            logStatement = this.findById(dto.getId());
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return logStatement;
     }
 
     @Override

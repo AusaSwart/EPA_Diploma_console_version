@@ -23,10 +23,8 @@ public class JobTitle implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("job_title{");
-        sb.append("id_job_title=").append(id_job_title);
-        sb.append(", job_title_name='").append(job_title_name).append('\'');
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("_");
+        sb.append("Job title: '").append(job_title_name).append('\'');
         return sb.toString();
     }
 }

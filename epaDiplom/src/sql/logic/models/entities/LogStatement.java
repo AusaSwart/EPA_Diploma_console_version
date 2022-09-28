@@ -87,7 +87,7 @@ public class LogStatement implements DataTransferObject {
     public List<LogStatement> getLogStatements (){ return logStatements; }
     public void setLogStatements(List<LogStatement> logStatements){ this.logStatements = logStatements;}
     public List<Long> getApproves (){ return approves; }
-    public void setApproves(List<Long> approves){ this.approve = approve;}
+    public void setApproves(List<Long> approves){ this.approves = approves;}
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("|___Statement___ ");

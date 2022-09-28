@@ -1,12 +1,14 @@
 package sql.logic.models.DAO;
 
 import sql.logic.models.entities.JobEmployee;
+import sql.logic.models.entities.JobTitle;
 import sql.logic.models.util.DataAccessObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JobEmployeeDAO extends DataAccessObject<JobEmployee> {
@@ -18,6 +20,27 @@ public class JobEmployeeDAO extends DataAccessObject<JobEmployee> {
     private static final String DELETE = "DELETE FROM job_employee WHERE id_employee = ?";
     private static final String UPDATE = "UPDATE job_employee SET id_job_title = ? WHERE id_employee = ?";
     private static final String INSERT = "INSERT INTO job_employee (id_job_title) VALUES (?)";
+    private static final String GET_COMPLICATED = "SELECT jt.job_title_name FROM public.job_employee je JOIN" +
+            " public.job_title jt ON jt.id = je.id_job_title WHERE je.id_employee = ?";
+
+    public JobEmployee findComplicatedReqFJ(long id) {
+        JobEmployee jobEmployee = new JobEmployee();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_COMPLICATED);){
+            statement.setLong(1, id);
+            ResultSet rs = statement.executeQuery();
+            List<JobTitle> jobTitles = new ArrayList<>();
+            while(rs.next()){
+                JobTitle jobTitle = new JobTitle();
+                jobTitle.setJobTitleName(rs.getString(1));
+                jobTitles.add(jobTitle);
+            }
+            jobEmployee.setJobTitles(jobTitles);
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return jobEmployee;
+    }
 
     @Override
     public JobEmployee findById(long id) {
