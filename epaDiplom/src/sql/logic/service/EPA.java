@@ -515,35 +515,49 @@ public class EPA {
 
                         // Delete employee's account (Admin)
 
-                        System.out.println("________________________________________________");
+                    System.out.println("________________________________________________");
+                    System.out.println();
+                    System.out.println("   Choose what employee you want to delete?");
+                    input = new Scanner(System.in);
+                    long deleteEmployee = input.nextLong();
+                    if (idEMPLOYEE == deleteEmployee) {
+                        System.out.println("   You cannot delete your own account");
                         System.out.println();
-                        System.out.println("   Choose what employee you want to delete?");
-                        input = new Scanner(System.in);
-                        long deleteEmployee = input.nextLong();
-                        System.out.println("   Are you sure?\n   y/n");
-                        input = new Scanner(System.in);
-                        String yesNo = input.nextLine();
-                        if (yesNo.equals("y") && idEMPLOYEE != deleteEmployee) {
+                        break;
+                    }
+                    System.out.println("   Are you sure?\n   y/n");
+                    input = new Scanner(System.in);
+                    String yesNo = input.nextLine();
+                    EmployeeDAO employeeDAO4 = new EmployeeDAO(c);
+                    Employee employee2 = employeeDAO4.findById(deleteEmployee);
+                    long check = employee2.getId();
+                    if (check == deleteEmployee){
+                        if (yesNo.equals("y") && idEMPLOYEE != check) {
                             ContactDAO contactDAO2 = new ContactDAO(c);
-                            Contact contact2 = contactDAO2.findById(deleteEmployee);
+                            Contact contact2 = contactDAO2.findById(check);
                             if (contact2.getId() != 0) {
-                                contactDAO2.delete(deleteEmployee);
+                                contactDAO2.delete(check);
                             }
                             LoginDAO loginDAO2 = new LoginDAO(c);
-                            loginDAO2.delete(deleteEmployee);
+                            loginDAO2.delete(check);
                             MainInfoDAO mainInfoDAO2 = new MainInfoDAO(c);
-                            mainInfoDAO2.delete(deleteEmployee);
+                            mainInfoDAO2.delete(check);
                             EmployeeDAO employeeDAO2 = new EmployeeDAO(c);
-                            employeeDAO2.delete(deleteEmployee);
+                            employeeDAO2.delete(check);
                             System.out.println("   Okay, done");
-                        } else if (idEMPLOYEE == deleteEmployee) {
-                            System.out.println("   You cannot delete your own account");
+                            System.out.println();
                         } else if (yesNo.equals("n")) {
                             System.out.println("   Okay");
+                            System.out.println();
                         } else {
                             System.out.println("   Incorrect decision");
+                            System.out.println();
                         }
                         break;
+                    } else {
+                        System.out.println("   Wrong employee's id");
+                        System.out.println();
+                    }
 
                     case "8":
 
@@ -566,27 +580,34 @@ public class EPA {
                         input = new Scanner(System.in);
                         long blockEmployee = input.nextLong();
                         if (blockEmployee == 1000000) {
-                            System.out.println("   You can't delete this user");
+                            System.out.println("   You can't block this user");
                             break;
                         }
                         System.out.println("   Are you sure?\n   y/n");
                         input = new Scanner(System.in);
                         yesNo = input.nextLine();
-                        if (yesNo.equals("y")) {
-                            EmployeeDAO employeeDAO1 = new EmployeeDAO(c);
-                            Employee employee1 = employeeDAO1.findById(blockEmployee);
-                            //check jo existing
-                            employee1.setPrivilege(0);
-                            employee1.setIdDep(employee1.getIdDep());
-                            employee1.setId(blockEmployee);
-                            employeeDAO1.update(employee1);
-                            System.out.println("   Employee №" +
-                                    blockEmployee +
-                                    " have been blocked");
-                        } else if (yesNo.equals("n")) {
-                            System.out.println("   Okay");
-                        } else System.out.println("   Wrong desicion");
-                        break;
+                        EmployeeDAO employeeDAO5 = new EmployeeDAO(c);
+                        Employee employee3 = employeeDAO5.findById(blockEmployee);
+                        long checkId = employee3.getId();
+                        if (checkId == blockEmployee) {
+                            if (yesNo.equals("y")) {
+                                EmployeeDAO employeeDAO1 = new EmployeeDAO(c);
+                                Employee employee1 = employeeDAO1.findById(blockEmployee);
+                                employee1.setPrivilege(0);
+                                employee1.setIdDep(employee1.getIdDep());
+                                employee1.setId(blockEmployee);
+                                employeeDAO1.update(employee1);
+                                System.out.println("   Employee №" +
+                                        blockEmployee +
+                                        " have been blocked");
+                            } else if (yesNo.equals("n")) {
+                                System.out.println("   Okay");
+                            } else System.out.println("   Wrong desicion");
+                            break;
+                        } else {
+                            System.out.println("   Such id doesn't exist");
+                            System.out.println();
+                        }
                 }
 
                 // Exit from app
