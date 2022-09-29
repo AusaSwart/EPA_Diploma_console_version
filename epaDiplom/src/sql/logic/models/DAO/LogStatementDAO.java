@@ -66,7 +66,7 @@ public class LogStatementDAO extends DataAccessObject<LogStatement> {
         return logStatement;
     }
 
-    public LogStatement getIDLS(long idLS, java.sql.Date date, long idEMPLOYEE) {
+    public LogStatement getIDLS( java.sql.Date date, long idEMPLOYEE) {
         LogStatement logStatement = new LogStatement();
         try (PreparedStatement statement = this.connection.prepareStatement(GET_ID_FROM_DATE);) {
             statement.setLong(1, idEMPLOYEE);

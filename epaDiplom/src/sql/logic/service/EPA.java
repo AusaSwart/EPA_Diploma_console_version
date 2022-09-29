@@ -65,6 +65,7 @@ public class EPA {
                     do {
                         System.out.println("________Please enter your login_______");
                         System.out.println();
+                        input = new Scanner(System.in);
                         String loginUser = input.nextLine();
                         System.out.println();
                         System.out.println("________Please enter your password________");
@@ -106,6 +107,7 @@ public class EPA {
                     System.out.println();
                     System.out.println("   Enter your login");
                     System.out.println();
+                    input = new Scanner(System.in);
                     String loginUser;
                     boolean check = false;
 
@@ -286,6 +288,7 @@ public class EPA {
                 System.out.println("     0 - End Session");
                 System.out.println();
                 System.out.println("________________________________________________");
+                input = new Scanner(System.in);
                 decision = input.nextLine();
 
                 // Cases
@@ -337,14 +340,15 @@ public class EPA {
 
                         // Make a log statement
 
-
                         System.out.println("________________________________________________");
                         System.out.println();
+
+
                         logStatementDAO = new LogStatementDAO(c);
                         logStatement = new LogStatement();
                         logStatement.setIdApprover(1000004);          // idApprover    //he's dean, but it's temporarily
                         logStatement.setIdEmployee(idEMPLOYEE);       // idEmployee    // We set chef when we have normal info
-
+                        String decisionCase;
                         boolean vac = false;
                         do {
                             System.out.println("   What type of leave do you interested in?");
@@ -353,7 +357,7 @@ public class EPA {
                             System.out.println("      3 - at your own expense");
                             System.out.println("      4 - dismissal");
                             System.out.println("      5 - else");
-                            String decisionCase = input.nextLine();
+                            decisionCase = input.nextLine();
                             switch (decisionCase) {
                                 case "1" -> {
                                     logStatement.setTypeLeave(1);
@@ -380,15 +384,17 @@ public class EPA {
                         } while (!vac);
 
                         System.out.println("   Any comments? y/n");
-                        String decisionCase1 = input.nextLine();
+                        input = new Scanner(System.in);
+                        decisionCase = input.nextLine();
                         boolean com = false;
                         do {
-                            if (decisionCase1.equals("y")) {
+                            if (decisionCase.equals("y")) {
+                                input = new Scanner(System.in);
                                 comment = input.nextLine();
                                 logStatement.setCommentLs(comment);       // Comment
                                 com = true;
                                 break;
-                            } else if (decisionCase1.equals("n")) {
+                            } else if (decisionCase.equals("n")) {
                                 System.out.println("   Okay");
                                 logStatement.setCommentLs(null);         // Comment
                                 com = true;
@@ -421,21 +427,23 @@ public class EPA {
 
                         System.out.println();
                         System.out.println("   Do you have any documents?");
-                        String decisionCase3 = input.next();
-                        if (decisionCase3.equals("y")) {
-                            long idLS = 0;
-                            logStatementDAO.getIDLS(idLS, date, idEMPLOYEE);
-                            if (idLS != 0) {
-                                DocumentDAO documentDAO = new DocumentDAO(c);
-                                Document document = new Document();
-                                System.out.println("   Write path for your doc");
-                                comment = input.next();
-                                document.setBodyDoc(comment);
-                                document.setId_LS(idLS);
-                                documentDAO.create(document); //_____Document created_______
-                            }
+                        input = new Scanner(System.in);
+                        decisionCase = input.nextLine();
+                        long idLS = 0;
+                        LogStatement logStatement1 = logStatementDAO.getIDLS( date, idEMPLOYEE);
+                        idLS = logStatement1.getId();
+                        if (decisionCase.equals("y") && idLS != 0) {
+                            DocumentDAO documentDAO = new DocumentDAO(c);
+                            Document document = new Document();
+                            System.out.println("   Write path for your doc");
+                            input = new Scanner(System.in);
+                            comment = input.nextLine();
+                            document.setBodyDoc(comment);
+                            document.setId_LS(idLS);
+                            documentDAO.create(document); //_____Document created_______
+                            System.out.println("   Document created");
                             break;
-                        } else if (decisionCase3.equals("n")) {
+                        } else if (decisionCase.equals("n")) {
                             System.out.println("   Okay");
                             break;
                         } else System.out.println("   Wrong decision. Try again, ");
@@ -450,12 +458,12 @@ public class EPA {
                         System.out.println();
                         System.out.println("   Lets create task. You need to write in comment" +
                                 " what do you need");
-                        date = new Date(System.currentTimeMillis());
+                        Date dateT = new Date(System.currentTimeMillis());
                         formatter = new SimpleDateFormat("dd.MM.yyyy");
-                        formatter.format(date);
+                        formatter.format(dateT);
                         TaskDAO taskDAO = new TaskDAO(c);
                         Task task1 = new Task();
-                        task1.setDateTask(date);
+                        task1.setDateTask(dateT);
                         taskDAO.create(task1);
                         task1 = taskDAO.findMaxIdTask(task1);
                         long taskID = task1.getId();
@@ -513,8 +521,9 @@ public class EPA {
                         input = new Scanner(System.in);
                         long deleteEmployee = input.nextLong();
                         System.out.println("   Are you sure?\n   y/n");
-                        String decisionCase4 = input.nextLine();
-                        if (decisionCase4.equals("y") && idEMPLOYEE != deleteEmployee) {
+                        input = new Scanner(System.in);
+                        String yesNo = input.nextLine();
+                        if (yesNo.equals("y") && idEMPLOYEE != deleteEmployee) {
                             ContactDAO contactDAO2 = new ContactDAO(c);
                             Contact contact2 = contactDAO2.findById(deleteEmployee);
                             if (contact2.getId() != 0) {
@@ -529,7 +538,7 @@ public class EPA {
                             System.out.println("   Okay, done");
                         } else if (idEMPLOYEE == deleteEmployee) {
                             System.out.println("   You cannot delete your own account");
-                        } else if (decisionCase4.equals("n")) {
+                        } else if (yesNo.equals("n")) {
                             System.out.println("   Okay");
                         } else {
                             System.out.println("   Incorrect decision");
@@ -562,10 +571,11 @@ public class EPA {
                         }
                         System.out.println("   Are you sure?\n   y/n");
                         input = new Scanner(System.in);
-                        String decisionCase5 = input.nextLine();
-                        if (decisionCase5.equals("y")) {
+                        yesNo = input.nextLine();
+                        if (yesNo.equals("y")) {
                             EmployeeDAO employeeDAO1 = new EmployeeDAO(c);
                             Employee employee1 = employeeDAO1.findById(blockEmployee);
+                            //check jo existing
                             employee1.setPrivilege(0);
                             employee1.setIdDep(employee1.getIdDep());
                             employee1.setId(blockEmployee);
@@ -573,12 +583,10 @@ public class EPA {
                             System.out.println("   Employee №" +
                                     blockEmployee +
                                     " have been blocked");
-                        } else if (decisionCase5.equals("n")) {
+                        } else if (yesNo.equals("n")) {
                             System.out.println("   Okay");
                         } else System.out.println("   Wrong desicion");
                         break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + decision);
                 }
 
                 // Exit from app

@@ -71,16 +71,18 @@ public class DocumentDAO extends DataAccessObject<Document> {
 
     @Override
     public Document create(Document dto) {
+        Document document = null;
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setLong(1, dto.getId_LS());
             statement.setString(2, dto.getBodyDoc());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+            this.connection.commit();
+            document = this.findById(dto.getId());
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return document;
     }
 
     @Override
