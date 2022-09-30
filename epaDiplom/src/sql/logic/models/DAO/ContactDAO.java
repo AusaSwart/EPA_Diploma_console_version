@@ -1,9 +1,11 @@
 package sql.logic.models.DAO;
 
 import sql.logic.models.entities.Contact;
+import sql.logic.models.entities.MainInfo;
 import sql.logic.models.util.DataAccessObject;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactDAO extends DataAccessObject<Contact> {
@@ -17,7 +19,25 @@ public class ContactDAO extends DataAccessObject<Contact> {
             " personal_number = ?, mail = ?  WHERE id_main_info_contact = ?";
     private static final String INSERT = "INSERT INTO contact (location_street, work_number, personal_number, " +
             "mail) VALUES (?, ?, ?, ?)";
-
+    private static final String GET_ONE_BY_ONE = "SELECT * FROM contact";
+    public List<Contact> findAllInList(){
+        List<Contact> contacts = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE_BY_ONE);){
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                Contact contact = new Contact();
+                contact.setLocationStreet(rs.getString("location_street"));
+                contact.setWorkNumber(rs.getLong("work_number"));
+                contact.setPersonalNumber(rs.getLong("personal_number"));
+                contact.setMail(rs.getString("mail"));
+                contacts.add(contact);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return contacts;
+    }
 
     @Override
     public Contact findById(long id) {

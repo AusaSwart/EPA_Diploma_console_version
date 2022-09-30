@@ -131,7 +131,7 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
     public void delete(long id) {
         try(PreparedStatement statement = this.connection.prepareStatement(DELETE);){
             statement.setLong(1, id);
-            statement.execute();
+            statement.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);

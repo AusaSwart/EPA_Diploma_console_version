@@ -1,9 +1,11 @@
 package sql.logic.models.DAO;
 
+import sql.logic.models.entities.Employee;
 import sql.logic.models.entities.MainInfo;
 import sql.logic.models.util.DataAccessObject;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainInfoDAO extends DataAccessObject<MainInfo> {
@@ -18,6 +20,7 @@ public class MainInfoDAO extends DataAccessObject<MainInfo> {
             "cabinet_office = ?, birth_d = ?, entry_d = ?  WHERE id_main_info = ?";
     private static final String INSERT = "INSERT INTO main_info (first_name, middle_name, last_name, " +
             "cabinet_office, birth_d, entry_d, id_main_info ) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String GET_ONE_BY_ONE = "SELECT * FROM main_info";
 
 
     @Override
@@ -41,6 +44,28 @@ public class MainInfoDAO extends DataAccessObject<MainInfo> {
             throw new RuntimeException(e);
         }
         return mainInfo;
+    }
+
+    public List<MainInfo> findAllInList(){
+        List<MainInfo> mainInfos = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE_BY_ONE);){
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                MainInfo mainInfo = new MainInfo();
+                mainInfo.setId(rs.getLong("id_main_info"));
+                mainInfo.setFirstName(rs.getString("first_name"));
+                mainInfo.setMiddleName(rs.getString("middle_name"));
+                mainInfo.setLastName(rs.getString("last_name"));
+                mainInfo.setCabinetOffice(rs.getString("cabinet_office"));
+                mainInfo.setBirthD(rs.getDate("birth_d"));
+                mainInfo.setEntryD(rs.getDate("entry_d"));
+                mainInfos.add(mainInfo);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return mainInfos;
     }
 
     @Override

@@ -30,15 +30,15 @@ public class MainInfo implements DataTransferObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("main_info{");
-        sb.append("id_main_info=").append(id_main_info);
-        sb.append(", fist_name='").append(first_name).append('\'');
-        sb.append(", middle_name='").append(middle_name).append('\'');
-        sb.append(", last_name='").append(last_name).append('\'');
-        sb.append(", cabinet_office='").append(cabinet_office).append('\'');
-        sb.append(", birth_d='").append(birth_d).append('\'');
-        sb.append(", entry_d='").append(entry_d).append('\'');
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("___Main Info \n");
+        //sb.append("id_main_info=").append(id_main_info);
+        sb.append("\n ").append(first_name);
+        sb.append(" ").append(middle_name);
+        sb.append(" ").append(last_name);
+        sb.append("\n Cabinet and office:").append(cabinet_office);
+        sb.append("\n Birth day: '").append(birth_d).append('\'');
+        sb.append("\n Entry day: '").append(entry_d).append('\'');
+        sb.append("\n");
         return sb.toString();
     }
 }

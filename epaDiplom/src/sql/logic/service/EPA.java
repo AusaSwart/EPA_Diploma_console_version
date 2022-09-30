@@ -316,8 +316,7 @@ public class EPA {
                         System.out.println("_Employee " + mainInfo.getFirstName() +
                                 " " + mainInfo.getMiddleName() + " " +
                                 mainInfo.getLastName() + ",");
-                        System.out.println();
-                        System.out.println("   №" + idEMPLOYEE);
+                        System.out.println(" №" + idEMPLOYEE);
                         System.out.println("");
                         System.out.println("_Name of department: "
                                 + department.getNameDep());
@@ -330,8 +329,10 @@ public class EPA {
                         System.out.println("_Contact____");
                         System.out.println("   Work number: " + contact.getWorkNumber());
                         System.out.println("   Personal number: +" + contact.getPersonalNumber());
+                        System.out.println("   Mail: " + contact.getMail());
                         System.out.println();
                         System.out.println("_Date of entry: " + mainInfo.getEntryD());
+                        System.out.println("_Birth day: " + mainInfo.getBirthD());
                         System.out.println();
                         System.out.println("________________________________________________");
                         break;
@@ -468,9 +469,10 @@ public class EPA {
                         task1 = taskDAO.findMaxIdTask(task1);
                         long taskID = task1.getId();
                         System.out.println("_Task table created____");
+                        input = new Scanner(System.in);
                         comment = input.nextLine();
-                        //EmployeeTaskDAO employeeTaskDAO1 = new EmployeeTaskDAO(c);
-                        //System.out.println("   Which employees need to do this task?");
+                        EmployeeTaskDAO employeeTaskDAO1 = new EmployeeTaskDAO(c);
+                        System.out.println("   Which employees need to do this task?");
 
 
                         // need to create task on few employees
@@ -495,7 +497,17 @@ public class EPA {
                         System.out.println("   There is list of all employees :");
                         System.out.println();
                         EmployeeDAO employeeDAO3 = new EmployeeDAO(c);
+//                        MainInfoDAO mainInfoDAO1 = new MainInfoDAO(c);
+//                        ContactDAO contactDAO1 = new ContactDAO(c);
                         List<Employee> employees = employeeDAO3.findAllInList();
+//                        List<MainInfo> mainInfos = mainInfoDAO1.findAllInList();
+//                        List<Contact> contacts = contactDAO1.findAllInList();
+//                        for (int i = 0; i < employees.size(); i++ ){
+//                            System.out.println(employees.get(i));
+//                            System.out.println(mainInfos.get(i));
+//                            System.out.println(contacts.get(i));
+//                            System.out.println("___________________");
+//                        }
                         employees.forEach(System.out::println);
                         System.out.println();
                         System.out.println("   This is end of list");
@@ -514,7 +526,7 @@ public class EPA {
                     case "7":
 
                         // Delete employee's account (Admin)
-
+                        // don't work
                     System.out.println("________________________________________________");
                     System.out.println();
                     System.out.println("   Choose what employee you want to delete?");
@@ -539,10 +551,10 @@ public class EPA {
                                 contactDAO2.delete(check);
                             }
                             LoginDAO loginDAO2 = new LoginDAO(c);
-                            loginDAO2.delete(check);
                             MainInfoDAO mainInfoDAO2 = new MainInfoDAO(c);
-                            mainInfoDAO2.delete(check);
                             EmployeeDAO employeeDAO2 = new EmployeeDAO(c);
+                            loginDAO2.delete(check);
+                            mainInfoDAO2.delete(check);
                             employeeDAO2.delete(check);
                             System.out.println("   Okay, done");
                             System.out.println();
