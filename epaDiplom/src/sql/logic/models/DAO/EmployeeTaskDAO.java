@@ -24,8 +24,8 @@ public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
     private static final String DELETE = "DELETE FROM emp_task WHERE id_executor = ?";
     private static final String UPDATE = "UPDATE emp_task SET id_employee = ?, id_task = ?, " +
             "comment_te = ? WHERE id_executor = ?";
-    private static final String INSERT = "INSERT INTO emp_task (id_employee, id_task," +
-        " comment_te) VALUES (?)";
+    private static final String INSERT = "INSERT INTO emp_task (id_executor, id_employee, id_task," +
+        " comment_te) VALUES (?, ?, ?, ?)";
     private static final String GET_COMPLICATED = "SELECT et.id_executor, et.comment_te," +
             " et.id_employee, et.id_task, t.date_task FROM public.emp_task et JOIN " +
             "public.task t ON et.id_task = t.id WHERE id_executor = ? ";
@@ -137,16 +137,16 @@ public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
     @Override
     public EmployeeTask create(EmployeeTask dto) {
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
-            statement.setLong(1, dto.getIdEmployee());
-            statement.setLong(2, dto.getIdTask());
-            statement.setString(3, dto.getCommentTE());
+            statement.setLong(1, dto.getId());
+            statement.setLong(2, dto.getIdEmployee());
+            statement.setLong(3, dto.getIdTask());
+            statement.setString(4, dto.getCommentTE());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
-        }catch(SQLException e){
+        } catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return dto;
     }
 
     @Override

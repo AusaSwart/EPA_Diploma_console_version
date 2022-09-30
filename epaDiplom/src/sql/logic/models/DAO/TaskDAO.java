@@ -86,15 +86,17 @@ public class TaskDAO extends DataAccessObject<Task> {
 
     @Override
     public Task create(Task dto) {
+        Task task = new Task();
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setDate(1, (Date) dto.getDateTask());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+            this.connection.commit();
+            task = this.findById(dto.getId());
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return task;
     }
 
     @Override

@@ -431,7 +431,7 @@ public class EPA {
                         input = new Scanner(System.in);
                         decisionCase = input.nextLine();
                         long idLS = 0;
-                        LogStatement logStatement1 = logStatementDAO.getIDLS( date, idEMPLOYEE);
+                        LogStatement logStatement1 = logStatementDAO.getIDLS(date, idEMPLOYEE);
                         idLS = logStatement1.getId();
                         if (decisionCase.equals("y") && idLS != 0) {
                             DocumentDAO documentDAO = new DocumentDAO(c);
@@ -469,14 +469,37 @@ public class EPA {
                         task1 = taskDAO.findMaxIdTask(task1);
                         long taskID = task1.getId();
                         System.out.println("_Task table created____");
-                        input = new Scanner(System.in);
-                        comment = input.nextLine();
+                        System.out.println();
                         EmployeeTaskDAO employeeTaskDAO1 = new EmployeeTaskDAO(c);
-                        System.out.println("   Which employees need to do this task?");
-
-
-                        // need to create task on few employees
-
+                        EmployeeTask employeeTask1 = new EmployeeTask();
+                        System.out.println("   Which employees need to do this task?\n   Write few and '0'" +
+                                " when you want to stop");
+                        long answer;
+                        do {
+                            EmployeeDAO employeeDAO1 = new EmployeeDAO(c);
+                            answer = input.nextInt();
+                            Employee employee1 = employeeDAO1.findById(answer);
+                            long checkTask = employee1.getId();
+                            String ans;
+                            String commentFT;
+                            if (answer == checkTask) {
+                                employeeTask1.setId(answer);
+                                employeeTask1.setIdEmployee(idEMPLOYEE);
+                                employeeTask1.setIdTask(taskID);
+                                System.out.println("   Any comments? y/n");
+                                ans = input.nextLine();
+                                if (ans.equals("y")) {
+                                    commentFT = input.nextLine();
+                                    employeeTask1.setCommentTE(commentFT);
+                                } else System.out.println(" Okay");
+                                employeeTaskDAO1.create(employeeTask1);
+                                System.out.println("   Table created");
+                            } else if (answer == 0) {
+                                System.out.println("Okay");
+                                break;
+                            } else System.out.println("   Incorrect id");
+                        } while (answer != 0);
+                        System.out.println("   Task done");
 
                         break;
 
@@ -527,49 +550,49 @@ public class EPA {
 
                         // Delete employee's account (Admin)
                         // don't work
-                    System.out.println("________________________________________________");
-                    System.out.println();
-                    System.out.println("   Choose what employee you want to delete?");
-                    input = new Scanner(System.in);
-                    long deleteEmployee = input.nextLong();
-                    if (idEMPLOYEE == deleteEmployee) {
-                        System.out.println("   You cannot delete your own account");
+                        System.out.println("________________________________________________");
                         System.out.println();
-                        break;
-                    }
-                    System.out.println("   Are you sure?\n   y/n");
-                    input = new Scanner(System.in);
-                    String yesNo = input.nextLine();
-                    EmployeeDAO employeeDAO4 = new EmployeeDAO(c);
-                    Employee employee2 = employeeDAO4.findById(deleteEmployee);
-                    long check = employee2.getId();
-                    if (check == deleteEmployee){
-                        if (yesNo.equals("y") && idEMPLOYEE != check) {
-                            ContactDAO contactDAO2 = new ContactDAO(c);
-                            Contact contact2 = contactDAO2.findById(check);
-                            if (contact2.getId() != 0) {
-                                contactDAO2.delete(check);
+                        System.out.println("   Choose what employee you want to delete?");
+                        input = new Scanner(System.in);
+                        long deleteEmployee = input.nextLong();
+                        if (idEMPLOYEE == deleteEmployee) {
+                            System.out.println("   You cannot delete your own account");
+                            System.out.println();
+                            break;
+                        }
+                        System.out.println("   Are you sure?\n   y/n");
+                        input = new Scanner(System.in);
+                        String yesNo = input.nextLine();
+                        EmployeeDAO employeeDAO4 = new EmployeeDAO(c);
+                        Employee employee2 = employeeDAO4.findById(deleteEmployee);
+                        long check = employee2.getId();
+                        if (check == deleteEmployee) {
+                            if (yesNo.equals("y") && idEMPLOYEE != check) {
+                                ContactDAO contactDAO2 = new ContactDAO(c);
+                                Contact contact2 = contactDAO2.findById(check);
+                                if (contact2.getId() != 0) {
+                                    contactDAO2.delete(check);
+                                }
+                                LoginDAO loginDAO2 = new LoginDAO(c);
+                                MainInfoDAO mainInfoDAO2 = new MainInfoDAO(c);
+                                EmployeeDAO employeeDAO2 = new EmployeeDAO(c);
+                                loginDAO2.delete(check);
+                                mainInfoDAO2.delete(check);
+                                employeeDAO2.delete(check);
+                                System.out.println("   Okay, done");
+                                System.out.println();
+                            } else if (yesNo.equals("n")) {
+                                System.out.println("   Okay");
+                                System.out.println();
+                            } else {
+                                System.out.println("   Incorrect decision");
+                                System.out.println();
                             }
-                            LoginDAO loginDAO2 = new LoginDAO(c);
-                            MainInfoDAO mainInfoDAO2 = new MainInfoDAO(c);
-                            EmployeeDAO employeeDAO2 = new EmployeeDAO(c);
-                            loginDAO2.delete(check);
-                            mainInfoDAO2.delete(check);
-                            employeeDAO2.delete(check);
-                            System.out.println("   Okay, done");
-                            System.out.println();
-                        } else if (yesNo.equals("n")) {
-                            System.out.println("   Okay");
-                            System.out.println();
+                            break;
                         } else {
-                            System.out.println("   Incorrect decision");
+                            System.out.println("   Wrong employee's id");
                             System.out.println();
                         }
-                        break;
-                    } else {
-                        System.out.println("   Wrong employee's id");
-                        System.out.println();
-                    }
 
                     case "8":
 
@@ -603,12 +626,12 @@ public class EPA {
                         long checkId = employee3.getId();
                         if (checkId == blockEmployee) {
                             if (yesNo.equals("y")) {
-                                EmployeeDAO employeeDAO1 = new EmployeeDAO(c);
-                                Employee employee1 = employeeDAO1.findById(blockEmployee);
+                                EmployeeDAO employeeDAO6 = new EmployeeDAO(c);
+                                Employee employee1 = employeeDAO6.findById(blockEmployee);
                                 employee1.setPrivilege(0);
                                 employee1.setIdDep(employee1.getIdDep());
                                 employee1.setId(blockEmployee);
-                                employeeDAO1.update(employee1);
+                                employeeDAO6.update(employee1);
                                 System.out.println("   Employee №" +
                                         blockEmployee +
                                         " have been blocked");
