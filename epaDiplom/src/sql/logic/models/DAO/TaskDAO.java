@@ -101,9 +101,16 @@ public class TaskDAO extends DataAccessObject<Task> {
 
     @Override
     public void delete(long id) {
+        try{
+            this.connection.setAutoCommit(false);
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         try(PreparedStatement statement = this.connection.prepareStatement(DELETE);){
             statement.setLong(1, id);
-            statement.execute();
+            statement.executeUpdate();
+            this.connection.commit();
         }catch (SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);

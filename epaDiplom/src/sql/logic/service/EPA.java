@@ -596,11 +596,11 @@ public class EPA {
                                     contactDAO.delete(check);
                                 }
                                 LoginDAO loginDAO2 = new LoginDAO(c);
-                                MainInfoDAO mainInfoDAO2 = new MainInfoDAO(c);
-                                EmployeeDAO employeeDAO2 = new EmployeeDAO(c);
+                                mainInfoDAO = new MainInfoDAO(c);
+                                employeeDAO = new EmployeeDAO(c);
                                 loginDAO2.delete(check);
-                                mainInfoDAO2.delete(check);
-                                employeeDAO2.delete(check);
+                                mainInfoDAO.delete(check);
+                                employeeDAO.delete(check);
                                 System.out.println("   Okay, done");
                                 System.out.println();
                             } else if (yesNo.equals("n")) {
