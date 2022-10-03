@@ -98,12 +98,11 @@ public class JobEmployeeDAO extends DataAccessObject<JobEmployee> {
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setLong(1, dto.getIdJobTitle());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return dto;
     }
 
     @Override

@@ -73,15 +73,17 @@ public class DepartmentDAO extends DataAccessObject<Department> {
 
     @Override
     public Department create(Department dto) {
+        Department department = new Department();
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setString(1, dto.getNameDep());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+            this.connection.commit();
+            department = this.findById(dto.getId());
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return department;
     }
 
     @Override

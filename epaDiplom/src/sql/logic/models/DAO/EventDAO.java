@@ -76,17 +76,19 @@ public class EventDAO extends DataAccessObject<Event> {
 
     @Override
     public Event create(Event dto) {
+        Event event = new Event();
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setString(1, dto.getTypeOfEvent());
             statement.setString(2, dto.getCommentFE());
             statement.setDate(3, (Date) dto.getDateOfEvent());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+            this.connection.commit();
+            event = this.findById(dto.getId());
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return event;
     }
 
     @Override

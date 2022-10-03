@@ -72,15 +72,17 @@ public class JobTitleDAO extends DataAccessObject<JobTitle> {
 
     @Override
     public JobTitle create(JobTitle dto) {
+        JobTitle jobTitle = new JobTitle();
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setString(1, dto.getJobTitleName());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+            this.connection.commit();
+            jobTitle = this.findById(dto.getId());
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return jobTitle;
     }
 
     @Override

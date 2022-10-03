@@ -98,18 +98,20 @@ public class ContactDAO extends DataAccessObject<Contact> {
 
     @Override
     public Contact create(Contact dto) {
+        Contact contact = new Contact();
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setString(1, dto.getLocationStreet());
             statement.setLong(2, dto.getWorkNumber());
             statement.setLong(3, dto.getPersonalNumber());
             statement.setString(4, dto.getMail());
             statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+            this.connection.commit();
+            contact = this.findById(dto.getId());
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return contact;
     }
 
     @Override

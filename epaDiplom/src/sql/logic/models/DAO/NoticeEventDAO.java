@@ -127,17 +127,16 @@ public class NoticeEventDAO extends DataAccessObject<NoticeEvent> {
 
     @Override
     public NoticeEvent create(NoticeEvent dto) {
+        NoticeEvent noticeEvent = new NoticeEvent();
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setLong(1, dto.getIdEvent());
             statement.setLong(2, dto.getIdEmployee());
-
-            statement.execute();
-            int id = this.getLastVal(EMPLOYEE_SEQUENCE);
-            return this.findById(id);
+            this.connection.commit();
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return dto;
     }
 
     @Override
