@@ -1,7 +1,7 @@
 package sql.logic.models.DAO;
 
-import sql.logic.models.entities.Department;
-import sql.logic.models.util.DataAccessObject;
+import sql.logic.models.DAO.entities.Department;
+import sql.logic.models.DAO.utilDAO.DataAccessObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

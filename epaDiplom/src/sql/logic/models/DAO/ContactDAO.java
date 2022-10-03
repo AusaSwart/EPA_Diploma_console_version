@@ -1,8 +1,7 @@
 package sql.logic.models.DAO;
 
-import sql.logic.models.entities.Contact;
-import sql.logic.models.entities.MainInfo;
-import sql.logic.models.util.DataAccessObject;
+import sql.logic.models.DAO.entities.Contact;
+import sql.logic.models.DAO.utilDAO.DataAccessObject;
 
 import java.sql.*;
 import java.util.ArrayList;

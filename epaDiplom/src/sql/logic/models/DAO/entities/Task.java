@@ -1,8 +1,7 @@
-package sql.logic.models.entities;
+package sql.logic.models.DAO.entities;
 
-import sql.logic.models.util.DataTransferObject;
+import sql.logic.models.DAO.entities.utilDTO.DataTransferObject;
 import java.sql.Date;
-import java.util.List;
 
 public class Task implements DataTransferObject {
     private long id;

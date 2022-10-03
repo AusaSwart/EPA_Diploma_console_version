@@ -1,10 +1,8 @@
 package sql.logic.models.DAO;
 
-import sql.logic.models.entities.EmployeeTask;
-import sql.logic.models.entities.Event;
-import sql.logic.models.entities.NoticeEvent;
-import sql.logic.models.entities.Task;
-import sql.logic.models.util.DataAccessObject;
+import sql.logic.models.DAO.entities.Event;
+import sql.logic.models.DAO.entities.NoticeEvent;
+import sql.logic.models.DAO.utilDAO.DataAccessObject;
 
 import java.sql.*;
 import java.util.ArrayList;

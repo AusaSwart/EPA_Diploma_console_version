@@ -1,7 +1,7 @@
 package sql.logic.service;
 
 import sql.logic.models.DAO.*;
-import sql.logic.models.entities.*;
+import sql.logic.models.DAO.entities.*;
 import sql.logic.repositoryConnectDB.DBConnectionManager;
 
 import java.sql.Connection;
@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 

@@ -1,10 +1,8 @@
 package sql.logic.models.DAO;
 
-import sql.logic.models.entities.Document;
-import sql.logic.models.entities.Event;
-import sql.logic.models.entities.LogStatement;
-import sql.logic.models.entities.NoticeEvent;
-import sql.logic.models.util.DataAccessObject;
+import sql.logic.models.DAO.entities.Document;
+import sql.logic.models.DAO.entities.LogStatement;
+import sql.logic.models.DAO.utilDAO.DataAccessObject;
 
 import java.sql.*;
 import java.util.ArrayList;

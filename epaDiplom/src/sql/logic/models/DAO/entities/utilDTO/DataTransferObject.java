@@ -1,4 +1,4 @@
-package sql.logic.models.util;
+package sql.logic.models.DAO.entities.utilDTO;
 
 public interface DataTransferObject {
     long getId();

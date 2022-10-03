@@ -1,6 +1,6 @@
-package sql.logic.models.entities;
+package sql.logic.models.DAO.entities;
 
-import sql.logic.models.util.DataTransferObject;
+import sql.logic.models.DAO.entities.utilDTO.DataTransferObject;
 
 public class Department implements DataTransferObject{
     private long id;

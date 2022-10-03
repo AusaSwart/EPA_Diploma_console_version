@@ -1,4 +1,6 @@
-package sql.logic.models.util;
+package sql.logic.models.DAO.utilDAO;
+
+import sql.logic.models.DAO.entities.utilDTO.DataTransferObject;
 
 import java.sql.*;
 import java.util.List;
