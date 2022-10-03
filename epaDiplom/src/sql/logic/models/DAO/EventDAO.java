@@ -1,5 +1,6 @@
 package sql.logic.models.DAO;
 
+import sql.logic.models.entities.Employee;
 import sql.logic.models.entities.Event;
 import sql.logic.models.util.DataAccessObject;
 
@@ -18,7 +19,19 @@ public class EventDAO extends DataAccessObject<Event> {
             " comment_fe = ?, date_of_event = ? WHERE id = ?";
     private static final String INSERT = "INSERT INTO event (type_of_event, comment_fe, date_of_event)" +
             " VALUES (?, ?, ?)";
-
+    private static final String GET_LAST_VALUE = "SELECT MAX(id) FROM event";
+    public Event findMaxId(Event event) {
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_LAST_VALUE);){
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                event.setId(rs.getLong("max"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return event;
+    }
     @Override
     public Event findById(long id) {
         Event event = new Event();

@@ -20,7 +20,8 @@ public class NoticeEventDAO extends DataAccessObject<NoticeEvent> {
     private static final String DELETE = "DELETE FROM notice_event WHERE id_recipient = ?";
     private static final String UPDATE = "UPDATE notice_event SET id_event = ?, id_employee = ?" +
             " WHERE id_recipient = ?";
-    private static final String INSERT = "INSERT INTO notice_event (id_event, id_employee) VALUES (?, ?)";
+    private static final String INSERT = "INSERT INTO notice_event (id_recipient, id_event, id_employee) " +
+            "VALUES (?, ?, ?)";
     private static final String GET_COMPLICATED_FE = "SELECT ne.id_recipient, ne.id_employee, ne.id_event," +
             "e.type_of_event, e.date_of_event, e.comment_fe FROM public.notice_event ne " +
             "JOIN public.event e ON ne.id_event = e.id WHERE id_recipient = ? ";
@@ -128,15 +129,23 @@ public class NoticeEventDAO extends DataAccessObject<NoticeEvent> {
     @Override
     public NoticeEvent create(NoticeEvent dto) {
         NoticeEvent noticeEvent = new NoticeEvent();
+        try{
+            this.connection.setAutoCommit(false);
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
-            statement.setLong(1, dto.getIdEvent());
-            statement.setLong(2, dto.getIdEmployee());
+            statement.setLong(1, dto.getId());
+            statement.setLong(2, dto.getIdEvent());
+            statement.setLong(3, dto.getIdEmployee());
+            statement.execute();
             this.connection.commit();
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return dto;
+        return noticeEvent;
     }
 
     @Override

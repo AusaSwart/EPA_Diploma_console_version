@@ -2,10 +2,13 @@ package sql.logic.models.entities;
 
 import sql.logic.models.util.DataTransferObject;
 
+import java.util.List;
+
 public class Employee implements DataTransferObject {
     private long id;
     private int privilege;
     private long id_dep;
+    private List<Long> employeeIDs;
 
     public long getId() {
         return id;
@@ -31,6 +34,8 @@ public class Employee implements DataTransferObject {
     public void setIdDep(long id_dep) {
         this.id_dep = id_dep;
     }
+    public List<Long> getEmployeeIDs (){ return employeeIDs; }
+    public void setEmployeeIDs(List<Long> approves){ this.employeeIDs = approves;}
 
     @Override
     public String toString() {

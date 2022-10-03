@@ -25,7 +25,56 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
     private static final String INSERT = "INSERT INTO employee (privilege, id_dep)" +
             "VALUES (?, ?)";
     private static final String GET_LAST_VALUE = "SELECT MAX(id) FROM employee";
-
+    private static final String GET_BY_DEP = "SELECT id FROM employee WHERE id_dep = ?";
+    private static final String GET_BY_PRIV = "SELECT id FROM employee WHERE privilege = ?";
+    private static final String GET_ID = "SELECT id FROM employee";
+    public List<Long> findIdList(){
+        List<Long> employeeIDs = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_ID);){
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                Employee employee = new Employee();
+                employee.setId(rs.getLong("id"));
+                employeeIDs.add(employee.getId());
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return employeeIDs;
+    }
+    public List<Long> findIdByPriv( int priv){
+        List<Long> employeeIDs = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_BY_PRIV);){
+            statement.setLong(1, priv);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                Employee employee = new Employee();
+                employee.setId(rs.getLong("id"));
+                employeeIDs.add(employee.getId());
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return employeeIDs;
+    }
+    public List<Long> findIDByDep( long idDep){
+        List<Long> employeeIDs = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_BY_DEP);){
+            statement.setLong(1, idDep);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                Employee employee = new Employee();
+                employee.setId(rs.getLong("id"));
+                employeeIDs.add(employee.getId());
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return employeeIDs;
+    }
 
     public Employee findMaxIdEmp(Employee employee) {
         try(PreparedStatement statement = this.connection.prepareStatement(GET_LAST_VALUE);){

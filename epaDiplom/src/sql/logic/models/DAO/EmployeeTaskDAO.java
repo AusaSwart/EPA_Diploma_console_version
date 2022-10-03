@@ -38,16 +38,16 @@ public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
             List<EmployeeTask> employeeTasks = new ArrayList<>();
             List<Task> tasks = new ArrayList<>();
             while(rs.next()){
-                EmployeeTask employeeTask1 = new EmployeeTask();
+                employeeTask = new EmployeeTask();
                 Task task = new Task();
-                employeeTask1.setId(rs.getLong(1));
-                employeeTask1.setCommentTE(rs.getString(2));
-                employeeTask1.setIdEmployee(rs.getLong(3));
-                employeeTask1.setIdTask(rs.getLong(4));
+                employeeTask.setId(rs.getLong(1));
+                employeeTask.setCommentTE(rs.getString(2));
+                employeeTask.setIdEmployee(rs.getLong(3));
+                employeeTask.setIdTask(rs.getLong(4));
                 task.setId(rs.getLong("id_task"));
                 task.setDateTask(rs.getDate(5));
                 tasks.add(task);
-                employeeTasks.add(employeeTask1);
+                employeeTasks.add(employeeTask);
             }
             employeeTask.setTasks(tasks);
             employeeTask.setEmployeeTasks(employeeTasks);
@@ -57,26 +57,6 @@ public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
         }
         return employeeTask;
     }
-
-//    public List<EmployeeTask> findByIDList(long id){
-//        List<EmployeeTask> employeeTasks = new ArrayList<>();
-//        try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE);){
-//            statement.setLong(1, id);
-//            ResultSet rs = statement.executeQuery();
-//            while(rs.next()){
-//                EmployeeTask employeeTask = new EmployeeTask();
-//                employeeTask.setId(rs.getLong("id_executor"));
-//                employeeTask.setIdEmployee(rs.getLong("id_employee"));
-//                employeeTask.setIdTask(rs.getLong("id_task"));
-//                employeeTask.setCommentTE(rs.getString("comment_te"));
-//                employeeTasks.add(employeeTask);
-//            }
-//        }catch(SQLException e){
-//            e.printStackTrace();
-//            throw new RuntimeException(e);
-//        }
-//        return employeeTasks;
-//    }
 
     @Override
     public EmployeeTask findById(long id) {
