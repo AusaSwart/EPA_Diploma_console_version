@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.List;
 
 public abstract class DataAccessObject < T extends DataTransferObject>{
+
     protected final Connection connection;
 
     public DataAccessObject(Connection connection){

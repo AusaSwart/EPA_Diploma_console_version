@@ -137,7 +137,7 @@ public class EPA {
                     EmployeeDAO employeeDAO = new EmployeeDAO(c);
                     Employee employee = new Employee();
                     employee.setPrivilege(2);  // 2 - for common users, this can be changed only by admin
-                    employee.setIdDep(0);    // 0 - for new employees, after they change it by themselves
+                    employee.setIdDep(0);      // 0 - for new employees, after they change it by themselves
                     employeeDAO.create(employee);
                     employeeDAO = new EmployeeDAO(c);
                     employee = new Employee();
@@ -231,8 +231,9 @@ public class EPA {
 
             LogStatementDAO logStatementDAO = new LogStatementDAO(c);
             LogStatement logStatement = logStatementDAO.findById(idEMPLOYEE);
+
             idT = logStatement.getId();
-            if (idT != 0) {
+            if (idT != 0 && (privilege == 1 || privilege == 3)) {
                 System.out.println("________________________________________________");
                 System.out.println();
                 boolean doe;
@@ -344,155 +345,167 @@ public class EPA {
                         System.out.println("________________________________________________");
                         System.out.println();
 
+                        System.out.println("   Who yours boss?");
+                        Scanner inputs = new Scanner(System.in);
+                        long answerCh = inputs.nextLong();
+                        employeeDAO = new EmployeeDAO(c);
+                        employee = new Employee();
+                        employee = employeeDAO.findById(answerCh);
+                        long buff = employee.getId();
+                        if (answerCh == buff ) {
+                            logStatementDAO = new LogStatementDAO(c);
+                            logStatement = new LogStatement();
+                            logStatement.setIdApprover(answerCh);
+                            logStatement.setIdEmployee(idEMPLOYEE);
+                            String decisionCase;
+                            boolean vac = false;
+                            do {
+                                System.out.println();
+                                System.out.println("   What type of leave do you interested in?");
+                                System.out.println("      1 - sick leave");
+                                System.out.println("      2 - vacation");
+                                System.out.println("      3 - at your own expense");
+                                System.out.println("      4 - dismissal");
+                                System.out.println("      5 - else");
+                                decisionCase = input.nextLine();
+                                switch (decisionCase) {
+                                    case "1" -> {
+                                        logStatement.setTypeLeave(1);
+                                        vac = true;
+                                    }
+                                    case "2" -> {
+                                        logStatement.setTypeLeave(2);
+                                        vac = true;
+                                    }
+                                    case "3" -> {
+                                        logStatement.setTypeLeave(3);
+                                        vac = true;
+                                    }
+                                    case "4" -> {
+                                        logStatement.setTypeLeave(4);
+                                        vac = true;
+                                    }
+                                    case "5" -> {
+                                        logStatement.setTypeLeave(5);
+                                        vac = true;
+                                    }
+                                    default -> throw new IllegalStateException("Unexpected value: " + decisionCase);
+                                }
+                            } while (!vac);
 
-                        logStatementDAO = new LogStatementDAO(c);
-                        logStatement = new LogStatement();
-                        logStatement.setIdApprover(1000004);          // idApprover    //he's dean, but it's temporarily
-                        logStatement.setIdEmployee(idEMPLOYEE);       // idEmployee    // We set chef when we have normal info
-                        String decisionCase;
-                        boolean vac = false;
-                        do {
-                            System.out.println("   What type of leave do you interested in?");
-                            System.out.println("      1 - sick leave");
-                            System.out.println("      2 - vacation");
-                            System.out.println("      3 - at your own expense");
-                            System.out.println("      4 - dismissal");
-                            System.out.println("      5 - else");
+                            System.out.println("   Any comments? y/n");
+                            input = new Scanner(System.in);
                             decisionCase = input.nextLine();
-                            switch (decisionCase) {
-                                case "1" -> {
-                                    logStatement.setTypeLeave(1);
-                                    vac = true;
-                                }
-                                case "2" -> {
-                                    logStatement.setTypeLeave(2);
-                                    vac = true;
-                                }
-                                case "3" -> {
-                                    logStatement.setTypeLeave(3);
-                                    vac = true;
-                                }
-                                case "4" -> {
-                                    logStatement.setTypeLeave(4);
-                                    vac = true;
-                                }
-                                case "5" -> {
-                                    logStatement.setTypeLeave(5);
-                                    vac = true;
-                                }
-                                default -> throw new IllegalStateException("Unexpected value: " + decisionCase);
-                            }
-                        } while (!vac);
+                            boolean com = false;
+                            do {
+                                if (decisionCase.equals("y")) {
+                                    input = new Scanner(System.in);
+                                    comment = input.nextLine();
+                                    logStatement.setCommentLs(comment);       // Comment
+                                    com = true;
+                                    break;
+                                } else if (decisionCase.equals("n")) {
+                                    System.out.println("   Okay");
+                                    logStatement.setCommentLs(null);         // Comment
+                                    com = true;
+                                    break;
+                                } else System.out.println("   Wrong decision. Try again ");
+                            } while (!com);
+                            System.out.println();
+                            System.out.println("   Period? (sum of days): ");
+                            int days = input.nextInt();
 
-                        System.out.println("   Any comments? y/n");
-                        input = new Scanner(System.in);
-                        decisionCase = input.nextLine();
-                        boolean com = false;
-                        do {
-                            if (decisionCase.equals("y")) {
+                            logStatement.setDaysSum(days);               // Sum of days
+
+                            System.out.println();
+
+                            logStatement.setApprove(3);                // Approve
+
+                            System.out.println("   When? (Date format - dd.MM.yyyy) : ");
+                            String buffer = input.next();
+                            DateFormat dtFmt = null;
+                            dtFmt = new SimpleDateFormat("dd.MM.yyyy");
+                            Date dateLeave = new Date(dtFmt.parse(buffer).getTime());
+                            logStatement.setDateLeave(dateLeave);      // Date Leave
+
+                            Date date = new Date(System.currentTimeMillis());
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+                            formatter.format(date);
+                            logStatement.setDateOfLs(date);            // Date of LS
+
+                            logStatementDAO.create(logStatement); //_____LogStatement created_____
+
+                            System.out.println();
+                            System.out.println("   Do you have any documents?");
+                            input = new Scanner(System.in);
+                            decisionCase = input.nextLine();
+                            long idLS = 0;
+                            LogStatement logStatement1 = logStatementDAO.getIDLS(date, idEMPLOYEE);
+                            idLS = logStatement1.getId();
+                            if (decisionCase.equals("y") && idLS != 0) {
+                                DocumentDAO documentDAO = new DocumentDAO(c);
+                                Document document = new Document();
+                                System.out.println("   Write path for your doc");
                                 input = new Scanner(System.in);
                                 comment = input.nextLine();
-                                logStatement.setCommentLs(comment);       // Comment
-                                com = true;
+                                document.setBodyDoc(comment);
+                                document.setId_LS(idLS);
+                                documentDAO.create(document); //_____Document created_______
+                                System.out.println("   Document created");
                                 break;
                             } else if (decisionCase.equals("n")) {
                                 System.out.println("   Okay");
-                                logStatement.setCommentLs(null);         // Comment
-                                com = true;
                                 break;
-                            } else System.out.println("   Wrong decision. Try again ");
-                        } while (!com);
-                        System.out.println();
-                        System.out.println("   Period? (sum of days): ");
-                        int days = input.nextInt();
+                            } else System.out.println("   Wrong decision. Try again, ");
 
-                        logStatement.setDaysSum(days);               // Sum of days
-
-                        System.out.println();
-
-                        logStatement.setApprove(3);                // Approve
-
-                        System.out.println("   When? (Date format - dd.MM.yyyy) : ");
-                        String buffer = input.next();
-                        DateFormat dtFmt = null;
-                        dtFmt = new SimpleDateFormat("dd.MM.yyyy");
-                        Date dateLeave = new Date(dtFmt.parse(buffer).getTime());
-                        logStatement.setDateLeave(dateLeave);      // Date Leave
-
-                        Date date = new Date(System.currentTimeMillis());
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-                        formatter.format(date);
-                        logStatement.setDateOfLs(date);            // Date of LS
-
-                        logStatementDAO.create(logStatement); //_____LogStatement created_____
-
-                        System.out.println();
-                        System.out.println("   Do you have any documents?");
-                        input = new Scanner(System.in);
-                        decisionCase = input.nextLine();
-                        long idLS = 0;
-                        LogStatement logStatement1 = logStatementDAO.getIDLS(date, idEMPLOYEE);
-                        idLS = logStatement1.getId();
-                        if (decisionCase.equals("y") && idLS != 0) {
-                            DocumentDAO documentDAO = new DocumentDAO(c);
-                            Document document = new Document();
-                            System.out.println("   Write path for your doc");
-                            input = new Scanner(System.in);
-                            comment = input.nextLine();
-                            document.setBodyDoc(comment);
-                            document.setId_LS(idLS);
-                            documentDAO.create(document); //_____Document created_______
-                            System.out.println("   Document created");
-                            break;
-                        } else if (decisionCase.equals("n")) {
-                            System.out.println("   Okay");
-                            break;
-                        } else System.out.println("   Wrong decision. Try again, ");
-
+                        } else {
+                            System.out.println("   Wrong id. Try again");
+                            System.out.println();
+                        }
                         break;
-
                     case "3":
 
                         // Create a task
 
                         System.out.println("________________________________________________");
                         System.out.println();
-                        System.out.println("   Lets create task. You need to write in comment" +
+                        System.out.println("   Let's create task. You need to write in comment" +
                                 " what do you need");
                         Date dateT = new Date(System.currentTimeMillis());
-                        formatter = new SimpleDateFormat("dd.MM.yyyy");
+                        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
                         formatter.format(dateT);
                         TaskDAO taskDAO = new TaskDAO(c);
-                        Task task1 = new Task();
-                        task1.setDateTask(dateT);
-                        taskDAO.create(task1);
-                        task1 = taskDAO.findMaxIdTask(task1);
-                        long taskID = task1.getId();
+                        Task task = new Task();
+                        task.setDateTask(dateT);
+                        taskDAO.create(task);
+                        task = new Task();
+                        task = taskDAO.findMaxIdTask(task);
+                        long taskID = task.getId();
                         System.out.println("_Task table created____");
                         System.out.println();
-                        EmployeeTaskDAO employeeTaskDAO1 = new EmployeeTaskDAO(c);
-                        EmployeeTask employeeTask1 = new EmployeeTask();
+                        employeeTaskDAO = new EmployeeTaskDAO(c);
+                        employeeTask = new EmployeeTask();
                         System.out.println("   Which employees need to do this task?\n   Write few and '0'" +
                                 " when you want to stop");
                         long answer;
                         do {
-                            EmployeeDAO employeeDAO1 = new EmployeeDAO(c);
+                            employeeDAO = new EmployeeDAO(c);
                             answer = input.nextInt();
-                            Employee employee1 = employeeDAO1.findById(answer);
+                            Employee employee1 = employeeDAO.findById(answer);
                             long checkTask = employee1.getId();
                             String ans;
                             String commentFT;
                             if (answer == checkTask) {
-                                employeeTask1.setId(answer);
-                                employeeTask1.setIdEmployee(idEMPLOYEE);
-                                employeeTask1.setIdTask(taskID);
+                                employeeTask.setId(answer);
+                                employeeTask.setIdEmployee(idEMPLOYEE);
+                                employeeTask.setIdTask(taskID);
                                 System.out.println("   Any comments? y/n");
                                 ans = input.nextLine();
                                 if (ans.equals("y")) {
                                     commentFT = input.nextLine();
-                                    employeeTask1.setCommentTE(commentFT);
+                                    employeeTask.setCommentTE(commentFT);
                                 } else System.out.println(" Okay");
-                                employeeTaskDAO1.create(employeeTask1);
+                                employeeTaskDAO.create(employeeTask);
                                 System.out.println("   Table created");
                             } else if (answer == 0) {
                                 System.out.println("Okay");
@@ -519,12 +532,12 @@ public class EPA {
                         System.out.println();
                         System.out.println("   There is list of all employees :");
                         System.out.println();
-                        EmployeeDAO employeeDAO3 = new EmployeeDAO(c);
-//                        MainInfoDAO mainInfoDAO1 = new MainInfoDAO(c);
-//                        ContactDAO contactDAO1 = new ContactDAO(c);
-                        List<Employee> employees = employeeDAO3.findAllInList();
-//                        List<MainInfo> mainInfos = mainInfoDAO1.findAllInList();
-//                        List<Contact> contacts = contactDAO1.findAllInList();
+                        employeeDAO = new EmployeeDAO(c);
+//                        mainInfoDAO = new MainInfoDAO(c);
+//                        contactDAO = new ContactDAO(c);
+                        List<Employee> employees = employeeDAO.findAllInList();
+//                        List<MainInfo> mainInfos = mainInfoDAO.findAllInList();
+//                        List<Contact> contacts = contactDAO.findAllInList();
 //                        for (int i = 0; i < employees.size(); i++ ){
 //                            System.out.println(employees.get(i));
 //                            System.out.println(mainInfos.get(i));
@@ -563,15 +576,15 @@ public class EPA {
                         System.out.println("   Are you sure?\n   y/n");
                         input = new Scanner(System.in);
                         String yesNo = input.nextLine();
-                        EmployeeDAO employeeDAO4 = new EmployeeDAO(c);
-                        Employee employee2 = employeeDAO4.findById(deleteEmployee);
-                        long check = employee2.getId();
+                        employeeDAO = new EmployeeDAO(c);
+                        employee = employeeDAO.findById(deleteEmployee);
+                        long check = employee.getId();
                         if (check == deleteEmployee) {
                             if (yesNo.equals("y") && idEMPLOYEE != check) {
-                                ContactDAO contactDAO2 = new ContactDAO(c);
-                                Contact contact2 = contactDAO2.findById(check);
-                                if (contact2.getId() != 0) {
-                                    contactDAO2.delete(check);
+                                contactDAO = new ContactDAO(c);
+                                contact = contactDAO.findById(check);
+                                if (contact.getId() != 0) {
+                                    contactDAO.delete(check);
                                 }
                                 LoginDAO loginDAO2 = new LoginDAO(c);
                                 MainInfoDAO mainInfoDAO2 = new MainInfoDAO(c);
