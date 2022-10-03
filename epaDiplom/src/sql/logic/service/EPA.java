@@ -107,7 +107,6 @@ public class EPA {
                     System.out.println();
                     System.out.println("   Enter your login");
                     System.out.println();
-                    input = new Scanner(System.in);
                     String loginUser;
                     boolean check = false;
 
@@ -261,7 +260,6 @@ public class EPA {
                             System.out.println("   Done");
                             doe = true;
                         } else System.out.println(" Incorrect, try again");
-
                     } while (!doe);
                 }
             }
@@ -352,7 +350,7 @@ public class EPA {
                         employee = new Employee();
                         employee = employeeDAO.findById(answerCh);
                         long buff = employee.getId();
-                        if (answerCh == buff ) {
+                        if (answerCh == buff) {
                             logStatementDAO = new LogStatementDAO(c);
                             logStatement = new LogStatement();
                             logStatement.setIdApprover(answerCh);
@@ -367,6 +365,7 @@ public class EPA {
                                 System.out.println("      3 - at your own expense");
                                 System.out.println("      4 - dismissal");
                                 System.out.println("      5 - else");
+                                input = new Scanner(System.in);
                                 decisionCase = input.nextLine();
                                 switch (decisionCase) {
                                     case "1" -> {
@@ -413,8 +412,8 @@ public class EPA {
                             } while (!com);
                             System.out.println();
                             System.out.println("   Period? (sum of days): ");
+                            input = new Scanner(System.in);
                             int days = input.nextInt();
-
                             logStatement.setDaysSum(days);               // Sum of days
 
                             System.out.println();
@@ -422,6 +421,7 @@ public class EPA {
                             logStatement.setApprove(3);                // Approve
 
                             System.out.println("   When? (Date format - dd.MM.yyyy) : ");
+                            input = new Scanner(System.in);
                             String buffer = input.next();
                             DateFormat dtFmt = null;
                             dtFmt = new SimpleDateFormat("dd.MM.yyyy");
@@ -463,6 +463,7 @@ public class EPA {
                             System.out.println();
                         }
                         break;
+
                     case "3":
 
                         // Create a task
@@ -479,41 +480,49 @@ public class EPA {
                         task.setDateTask(dateT);
                         taskDAO.create(task);
                         task = new Task();
+                        taskDAO = new TaskDAO(c);
                         task = taskDAO.findMaxIdTask(task);
                         long taskID = task.getId();
                         System.out.println("_Task table created____");
                         System.out.println();
-                        employeeTaskDAO = new EmployeeTaskDAO(c);
-                        employeeTask = new EmployeeTask();
-                        System.out.println("   Which employees need to do this task?\n   Write few and '0'" +
-                                " when you want to stop");
+                        System.out.println("   Which employees need to do this task?\n" +
+                                "   Write few id's and '1', when you're done");
                         long answer;
                         do {
                             employeeDAO = new EmployeeDAO(c);
-                            answer = input.nextInt();
-                            Employee employee1 = employeeDAO.findById(answer);
-                            long checkTask = employee1.getId();
+                            inputs = new Scanner(System.in);
+                            answer = inputs.nextLong();
+                            employee = new Employee();
+                            employee = employeeDAO.findById(answer);
+                            long checkTask = employee.getId();
                             String ans;
-                            String commentFT;
                             if (answer == checkTask) {
+                                employeeTaskDAO = new EmployeeTaskDAO(c);
+                                employeeTask = new EmployeeTask();
                                 employeeTask.setId(answer);
                                 employeeTask.setIdEmployee(idEMPLOYEE);
                                 employeeTask.setIdTask(taskID);
                                 System.out.println("   Any comments? y/n");
+                                input = new Scanner(System.in);
                                 ans = input.nextLine();
                                 if (ans.equals("y")) {
-                                    commentFT = input.nextLine();
-                                    employeeTask.setCommentTE(commentFT);
+                                    input = new Scanner(System.in);
+                                    comment = input.nextLine();
+                                    employeeTask.setCommentTE(comment);
                                 } else System.out.println(" Okay");
                                 employeeTaskDAO.create(employeeTask);
                                 System.out.println("   Table created");
+                                System.out.println();
                             } else if (answer == 0) {
                                 System.out.println("Okay");
+                                System.out.println();
                                 break;
-                            } else System.out.println("   Incorrect id");
-                        } while (answer != 0);
+                            } else {
+                                System.out.println("   Incorrect id");
+                                System.out.println();
+                            }
+                        } while (answer != 1);
                         System.out.println("   Task done");
-
                         break;
 
                     case "4":

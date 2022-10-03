@@ -136,17 +136,25 @@ public class EmployeeTaskDAO extends DataAccessObject<EmployeeTask> {
 
     @Override
     public EmployeeTask create(EmployeeTask dto) {
+        EmployeeTask employeeTask = new EmployeeTask();
+        try{
+            this.connection.setAutoCommit(false);
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setLong(1, dto.getId());
             statement.setLong(2, dto.getIdEmployee());
             statement.setLong(3, dto.getIdTask());
             statement.setString(4, dto.getCommentTE());
             statement.execute();
+            this.connection.commit();
         } catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return dto;
+        return employeeTask;
     }
 
     @Override
