@@ -285,18 +285,18 @@ public class EPA {
                 System.out.println("________Main menu________");
                 System.out.println();
                 System.out.println("""
-                                   Choose what you want to do now:
-                                   1 - Take a look on info about you
-                                   2 - Make a log statement
-                                   3 - Create a task
-                                   4 - Create an event
-                                   5 - Take a look on list of employees
-                                   6 - Update info about you""".indent(3));
+                        Choose what you want to do now:
+                        1 - Take a look on info about you
+                        2 - Make a log statement
+                        3 - Create a task
+                        4 - Create an event
+                        5 - Take a look on list of employees
+                        6 - Change login n' password, contact's""".indent(3));
                 if (privilege == 1) {      // For admin
                     System.out.println("""
-                                   7(*) - Delete Account
-                                   8(*) - Correct Info in Account
-                                   9(*) - Block Account""".indent(3));
+                            7(*) - Delete Account
+                            8(*) - Correct Info in employee's account
+                            9(*) - Block Account""".indent(3));
                 }
                 System.out.println("     0 - End Session\n");
                 System.out.println("________________________________________________");
@@ -356,14 +356,13 @@ public class EPA {
                         System.out.println("________________________________________________");
                         System.out.println();
 
-                        System.out.println("   Who yours boss?");
+                        System.out.println("   Who is your boss?");
                         Scanner inputs = new Scanner(System.in);
                         long answerCh = inputs.nextLong();
                         employeeDAO = new EmployeeDAO(c);
-                        employee = new Employee();
                         employee = employeeDAO.findById(answerCh);
                         long buff = employee.getId();
-                        if (answerCh == buff) {
+                        if (answerCh == buff && buff != 0) {
                             logStatementDAO = new LogStatementDAO(c);
                             logStatement = new LogStatement();
                             logStatement.setIdApprover(answerCh);
@@ -373,12 +372,12 @@ public class EPA {
                             do {
                                 System.out.println();
                                 System.out.println(""" 
-                                            What type of leave do you interested in?
-                                              1 - sick leave
-                                              2 - vacation
-                                              3 - at your own expense
-                                              4 - dismissal
-                                              5 - else""".indent(3));
+                                        What type of leave do you interested in?
+                                          1 - sick leave
+                                          2 - vacation
+                                          3 - at your own expense
+                                          4 - dismissal
+                                          5 - else""".indent(3));
                                 input = new Scanner(System.in);
                                 decisionCase = input.nextLine();
                                 switch (decisionCase) {
@@ -402,7 +401,7 @@ public class EPA {
                                         logStatement.setTypeLeave(5);
                                         vac = false;
                                     }
-                                    default -> throw new IllegalStateException("Unexpected value: " + decisionCase);
+                                    default -> System.out.println("   Incorrect");
                                 }
                             } while (vac);
 
@@ -471,7 +470,6 @@ public class EPA {
                                 System.out.println("   Okay");
                                 break;
                             } else System.out.println("   Wrong decision. Try again, ");
-
                         } else {
                             System.out.println("   Wrong id. Try again");
                             System.out.println();
@@ -546,9 +544,9 @@ public class EPA {
                         System.out.println("________________________________________________");
                         System.out.println();
                         System.out.println("""
-                                              Lets create a event. First we need to create event,
-                                              then send them to the employeers.
-                                              Okay, write type of event:""".indent(3));
+                                Lets create a event. First we need to create event,
+                                then send them to the employeers.
+                                Okay, write type of event:""".indent(3));
                         System.out.println();
                         EventDAO eventDAO = new EventDAO(c);
                         Event event = new Event();
@@ -573,12 +571,12 @@ public class EPA {
                         System.out.println("_Table event created____");
                         System.out.println();
                         System.out.println("""   
-                                              Now we need to send these to employees
-                                              Choose for whom""".indent(3));
+                                Now we need to send these to employees
+                                Choose for whom""".indent(3));
                         System.out.println("""
-                                              1 - by department
-                                              2 - by privilege
-                                              3 - to all employees""".indent(3));
+                                1 - by department
+                                2 - by privilege
+                                3 - to all employees""".indent(3));
                         System.out.println();
                         input = new Scanner(System.in);
                         String ans = input.nextLine();
@@ -587,28 +585,28 @@ public class EPA {
                             switch (ans) {
                                 case "1" -> {
                                     System.out.println("""
-                                              0 - новенький
-                                              1 - ректорат
-                                              2 - пресс-служба
-                                              3 - сектор предупреждения и ликвидации чрезвычайных ситуацийn  
-                                              4 - юридический отдел
-                                              5 - центр кадровой работы
-                                              6 - отдел по работе с персоналом
-                                              7 - отдел документационного обеспечения  
-                                              8 - сектор по работе со студентами
-                                              9 - бухгалтерия
-                                              10 - библиотека
-                                              11 - учебно-методическое управление
-                                              12 - центр информатизации и инновационных разработок БГУИР
-                                              13 - отдел вахтовой службы
-                                              14 - центр продвижения образовательных услуг
-                                              15 - факультет информационных технологий и управления
-                                              16 - факультет радиотехники и электроники
-                                              17 - факультет компьютерных систем и сетей
-                                              18 - факультет информационной безопасности
-                                              19 - инженерно-экономический факультет
-                                              20 - факультет доуниверситетской подготовки и профессиональной ориентации
-                                              21 - центр материально-технического обеспечения""");
+                                            0 - новенький
+                                            1 - ректорат
+                                            2 - пресс-служба
+                                            3 - сектор предупреждения и ликвидации чрезвычайных ситуацийn  
+                                            4 - юридический отдел
+                                            5 - центр кадровой работы
+                                            6 - отдел по работе с персоналом
+                                            7 - отдел документационного обеспечения  
+                                            8 - сектор по работе со студентами
+                                            9 - бухгалтерия
+                                            10 - библиотека
+                                            11 - учебно-методическое управление
+                                            12 - центр информатизации и инновационных разработок БГУИР
+                                            13 - отдел вахтовой службы
+                                            14 - центр продвижения образовательных услуг
+                                            15 - факультет информационных технологий и управления
+                                            16 - факультет радиотехники и электроники
+                                            17 - факультет компьютерных систем и сетей
+                                            18 - факультет информационной безопасности
+                                            19 - инженерно-экономический факультет
+                                            20 - факультет доуниверситетской подготовки и профессиональной ориентации
+                                            21 - центр материально-технического обеспечения""");
                                     System.out.println();
                                     inputs = new Scanner(System.in);
                                     answerCh = inputs.nextLong();
@@ -627,9 +625,9 @@ public class EPA {
                                 }
                                 case "2" -> {
                                     System.out.println("""
-                                             1 - admin (can manipulate with another accounts)
-                                             2 - common user (can manipulate only own account)
-                                             3 - head (can manipulate own account and also makes approves on logs)""".indent(2));
+                                            1 - admin (can manipulate with another accounts)
+                                            2 - common user (can manipulate only own account)
+                                            3 - head (can manipulate own account and also makes approves on logs)""".indent(2));
                                     System.out.println();
                                     inputs = new Scanner(System.in);
                                     int priv = inputs.nextInt();
@@ -687,7 +685,7 @@ public class EPA {
                         List<Long> employeesID = employeeDAO.findIdList();
                         List<MainInfo> mainInfos = mainInfoDAO.findAllInList();
                         List<Contact> contacts = contactDAO.findAllInList();
-                        for (int i = 0; i < employees.size(); i++ ){
+                        for (int i = 0; i < employees.size(); i++) {
                             System.out.println("-------------------------------|");
                             System.out.println(employees.get(i));
                             System.out.println(mainInfos.get(i));
@@ -705,11 +703,48 @@ public class EPA {
 
                     case "6":
 
-                        // Update info about personal account
+                        // Change login\\password && contact's
 
                         System.out.println("________________________________________________");
                         System.out.println();
-
+                        System.out.println("   You want to change login/password (1) or contacts (2)?");
+                        input = new Scanner(System.in);
+                        ans = input.nextLine();
+                        switch (ans) {
+                            case "1" -> {
+                                LoginDAO loginDAO = new LoginDAO(c);
+                                Login login = new Login();
+                                System.out.println("  Input new login:");
+                                String loginUser = input.nextLine();
+                                System.out.println("  New password:");
+                                String passwordUser = input.nextLine();
+                                login.setLoginUser(loginUser);
+                                login.setPasswordUser(passwordUser);
+                                login.setId(idEMPLOYEE);
+                                loginDAO.update(login);
+                            }
+                            case "2" -> {
+                                contactDAO = new ContactDAO(c);
+                                contact = new Contact();
+                                System.out.println();
+                                System.out.println("  Input new mail:");
+                                String mail = input.nextLine();
+                                System.out.println("  Work number:");
+                                input = new Scanner(System.in);
+                                long wNum = input.nextLong();
+                                System.out.println("  Personal number:");
+                                input = new Scanner(System.in);
+                                long pNum = input.nextLong();
+                                contact.setWorkNumber(wNum);
+                                contact.setPersonalNumber(pNum);
+                                contact.setMail(mail);
+                                contact.setId(idEMPLOYEE);
+                                contactDAO.update(contact);
+                            }
+                            default -> {
+                                System.out.println("  Incorrect decision");
+                            }
+                        }
                         break;
 
                     case "7":
