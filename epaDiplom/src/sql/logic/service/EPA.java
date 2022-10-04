@@ -669,18 +669,25 @@ public class EPA {
                         System.out.println("   There is list of all employees :");
                         System.out.println();
                         employeeDAO = new EmployeeDAO(c);
-//                        mainInfoDAO = new MainInfoDAO(c);
-//                        contactDAO = new ContactDAO(c);
+                        mainInfoDAO = new MainInfoDAO(c);
+                        contactDAO = new ContactDAO(c);
+                        jobEmployeeDAO = new JobEmployeeDAO(c);
+                        jobEmployee = new JobEmployee();
                         List<Employee> employees = employeeDAO.findAllInList();
-//                        List<MainInfo> mainInfos = mainInfoDAO.findAllInList();
-//                        List<Contact> contacts = contactDAO.findAllInList();
-//                        for (int i = 0; i < employees.size(); i++ ){
-//                            System.out.println(employees.get(i));
-//                            System.out.println(mainInfos.get(i));
-//                            System.out.println(contacts.get(i));
-//                            System.out.println("___________________");
-//                        }
-                        employees.forEach(System.out::println);
+                        List<Long> employeesID = employeeDAO.findIdList();
+                        List<MainInfo> mainInfos = mainInfoDAO.findAllInList();
+                        List<Contact> contacts = contactDAO.findAllInList();
+                        for (int i = 0; i < employees.size(); i++ ){
+                            System.out.println("-------------------------------|");
+                            System.out.println(employees.get(i));
+                            System.out.println(mainInfos.get(i));
+                            System.out.println(contacts.get(i));
+                            System.out.println("___Job title:");
+                            jobEmployee = jobEmployeeDAO.findComplicatedReqFJ(employeesID.get(i));
+                            jobEmployee.getJobTitles().forEach(System.out::println);
+                            System.out.println();
+                            System.out.println("-------------------------------|");
+                        }
                         System.out.println();
                         System.out.println("   This is end of list");
                         System.out.println();

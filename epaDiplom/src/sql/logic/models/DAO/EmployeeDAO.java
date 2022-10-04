@@ -17,7 +17,7 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
     }
     private static final String GET_ONE = "SELECT id, privilege, id_dep " +
             "FROM employee WHERE id=?";
-    private static final String GET_ONE_BY_ONE = "SELECT * FROM employee";
+    private static final String GET_ONE_BY_ONE = "SELECT * FROM employee ORDER BY id";
     private static final String DELETE = "DELETE FROM employee WHERE id = ?";
     private static final String UPDATE = "UPDATE employee SET privilege = ?, " +
             "id_dep = ? WHERE id = ?";
@@ -26,7 +26,7 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
     private static final String GET_LAST_VALUE = "SELECT MAX(id) FROM employee";
     private static final String GET_BY_DEP = "SELECT id FROM employee WHERE id_dep = ?";
     private static final String GET_BY_PRIV = "SELECT id FROM employee WHERE privilege = ?";
-    private static final String GET_ID = "SELECT id FROM employee";
+    private static final String GET_ID = "SELECT id FROM employee ORDER BY id";
     public List<Long> findIdList(){
         List<Long> employeeIDs = new ArrayList<>();
         try(PreparedStatement statement = this.connection.prepareStatement(GET_ID);){

@@ -18,7 +18,7 @@ public class ContactDAO extends DataAccessObject<Contact> {
             " personal_number = ?, mail = ?  WHERE id_main_info_contact = ?";
     private static final String INSERT = "INSERT INTO contact (location_street, work_number, personal_number, " +
             "mail) VALUES (?, ?, ?, ?)";
-    private static final String GET_ONE_BY_ONE = "SELECT * FROM contact";
+    private static final String GET_ONE_BY_ONE = "SELECT * FROM contact ORDER BY id_main_info_contact";
     public List<Contact> findAllInList(){
         List<Contact> contacts = new ArrayList<>();
         try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE_BY_ONE);){

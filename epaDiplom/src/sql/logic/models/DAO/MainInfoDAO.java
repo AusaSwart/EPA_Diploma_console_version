@@ -19,7 +19,7 @@ public class MainInfoDAO extends DataAccessObject<MainInfo> {
             "cabinet_office = ?, birth_d = ?, entry_d = ?  WHERE id_main_info = ?";
     private static final String INSERT = "INSERT INTO main_info (first_name, middle_name, last_name, " +
             "cabinet_office, birth_d, entry_d, id_main_info ) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String GET_ONE_BY_ONE = "SELECT * FROM main_info";
+    private static final String GET_ONE_BY_ONE = "SELECT * FROM main_info ORDER BY id_main_info";
 
 
     @Override
