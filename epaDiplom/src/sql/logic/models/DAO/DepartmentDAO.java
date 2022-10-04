@@ -1,12 +1,14 @@
 package sql.logic.models.DAO;
 
 import sql.logic.models.DAO.entities.Department;
+import sql.logic.models.DAO.entities.Employee;
 import sql.logic.models.DAO.utilDAO.DataAccessObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentDAO extends DataAccessObject<Department> {
@@ -18,7 +20,7 @@ public class DepartmentDAO extends DataAccessObject<Department> {
     private static final String DELETE = "DELETE FROM department WHERE id = ?";
     private static final String UPDATE = "UPDATE department SET name_dep = ? WHERE id = ?";
     private static final String INSERT = "INSERT INTO department (name_dep) VALUES (?)";
-
+    private static final String GET_ONE_BY_ONE = "SELECT * FROM department ORDER BY id";
 
     @Override
     public Department findById(long id) {
@@ -40,7 +42,20 @@ public class DepartmentDAO extends DataAccessObject<Department> {
 
     @Override
     public List<Department> findAll() {
-        return null;
+        List<Department> departments = new ArrayList<>();
+        try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE_BY_ONE);) {
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Department department = new Department();
+                department.setId(rs.getLong("id"));
+                department.setNameDep(rs.getString("name_dep"));
+                departments.add(department);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return departments;
     }
 
     @Override
@@ -73,7 +88,7 @@ public class DepartmentDAO extends DataAccessObject<Department> {
 
     @Override
     public Department create(Department dto) {
-        Department department = new Department();
+        Department department = null;
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setString(1, dto.getNameDep());
             statement.execute();

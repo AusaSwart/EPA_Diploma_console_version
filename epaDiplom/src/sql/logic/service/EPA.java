@@ -43,9 +43,13 @@ public class EPA {
 
             // Employee greetings
 
-            System.out.println("________Hello, Employee. Present yourself________");
-            System.out.println("   Please, tape : \n   1 - If you are already have login;");
-            System.out.println("   2 - If you are need to register;");
+            System.out.println("""
+                                 |____________Hello, Employee. Present yourself_____________|
+                                 |   Please, tape :                                         |
+                                 |  1 - If you are already have login                       |
+                                 |  2 - If you are need to register                         |
+                                 |----------------------------------------------------------|""".indent(3));
+
             System.out.println();
 
             boolean done = false;
@@ -82,20 +86,24 @@ public class EPA {
                         if (idEMPLOYEE == 0) {
                             System.out.println("Incorrect, try again");
                         } else {
-                            System.out.println("---- Hello, new employee №" + idEMPLOYEE + " -----");
+                            System.out.println("""
+                                                  |---------------------------------------------------|
+                                                  |----- Hello, new employee №" + idEMPLOYEE + " -----|
+                                                  |___________________________________________________|
+                                                     \\-------We are done with the entrance------/""");
                             System.out.println();
                             if (privilege == 0) {
                                 System.out.println();
-                                System.out.println("++++++++++++++++++++++++++++++");
-                                System.out.println("   You have been blocked ");
-                                System.out.println("++++++++++++++++++++++++++++++");
+                                System.out.println("""
+                                                  ++++++++++++++++++++++++++++++
+                                                  +   You have been blocked    +
+                                                  ++++++++++++++++++++++++++++++""");
+
                                 System.exit(0);
                             }
                             correct = true;
                         }
                     } while (!correct);
-
-                    System.out.println("|___We are done with the entrance___|");
                     done = true;
 
                 }
@@ -310,41 +318,8 @@ public class EPA {
 
                         // Main Info for employee about his account
 
-                        System.out.println("|-----------------------------------------------------|");
-                        System.out.println();
                         EmployeeDAO employeeDAO = new EmployeeDAO(c);
-                        Employee employee = employeeDAO.findById(idEMPLOYEE);
-                        DepartmentDAO departmentDAO = new DepartmentDAO(c);
-                        Department department = departmentDAO.findById(employee.getIdDep());
-                        MainInfoDAO mainInfoDAO = new MainInfoDAO(c);
-                        MainInfo mainInfo = mainInfoDAO.findById(idEMPLOYEE);
-                        ContactDAO contactDAO = new ContactDAO(c);
-                        Contact contact = contactDAO.findById(idEMPLOYEE);
-                        JobEmployeeDAO jobEmployeeDAO = new JobEmployeeDAO(c);
-                        JobEmployee jobEmployee = jobEmployeeDAO.findComplicatedReqFJ(idEMPLOYEE);
-
-                        System.out.println("___ Main Info ___");
-                        System.out.println("_Employee " + mainInfo.getFirstName() +
-                                " " + mainInfo.getMiddleName() + " " +
-                                mainInfo.getLastName() + ",");
-                        System.out.println(" №" + idEMPLOYEE);
-                        System.out.println("");
-                        System.out.println("_Name of department: "
-                                + department.getNameDep());
-                        jobEmployee.getJobTitles().forEach(System.out::println);
-                        System.out.println();
-                        System.out.println("_Location____");
-                        System.out.println("   Work place: " + mainInfo.getCabinetOffice());
-                        System.out.println("   Street: " + contact.getLocationStreet());
-                        System.out.println();
-                        System.out.println("_Contact____");
-                        System.out.println("   Work number: " + contact.getWorkNumber());
-                        System.out.println("   Personal number: +" + contact.getPersonalNumber());
-                        System.out.println("   Mail: " + contact.getMail());
-                        System.out.println();
-                        System.out.println("_Date of entry: " + mainInfo.getEntryD());
-                        System.out.println("_Birth day: " + mainInfo.getBirthD());
-                        System.out.println();
+                        employeeDAO.infoOfEmployee(idEMPLOYEE, c);
                         break;
 
                     case "2":
@@ -358,7 +333,7 @@ public class EPA {
                         Scanner inputs = new Scanner(System.in);
                         long answerCh = inputs.nextLong();
                         employeeDAO = new EmployeeDAO(c);
-                        employee = employeeDAO.findById(answerCh);
+                        Employee employee = employeeDAO.findById(answerCh);
                         long buff = employee.getId();
                         if (answerCh == buff && buff != 0) {
                             logStatementDAO = new LogStatementDAO(c);
@@ -675,10 +650,10 @@ public class EPA {
                         System.out.println("   There is list of all employees :");
                         System.out.println();
                         employeeDAO = new EmployeeDAO(c);
-                        mainInfoDAO = new MainInfoDAO(c);
-                        contactDAO = new ContactDAO(c);
-                        jobEmployeeDAO = new JobEmployeeDAO(c);
-                        jobEmployee = new JobEmployee();
+                        MainInfoDAO mainInfoDAO = new MainInfoDAO(c);
+                        ContactDAO contactDAO = new ContactDAO(c);
+                        JobEmployeeDAO jobEmployeeDAO = new JobEmployeeDAO(c);
+                        JobEmployee jobEmployee = new JobEmployee();
                         List<Employee> employees = employeeDAO.findAllInList();
                         List<Long> employeesID = employeeDAO.findIdList();
                         List<MainInfo> mainInfos = mainInfoDAO.findAllInList();
@@ -738,7 +713,7 @@ public class EPA {
                             }
                             case "2" -> {
                                 contactDAO = new ContactDAO(c);
-                                contact = new Contact();
+                                Contact contact = new Contact();
                                 System.out.println();
                                 String mail;
                                 String street;
@@ -800,7 +775,7 @@ public class EPA {
                         if (check == deleteEmployee) {
                             if (yesNo.equals("y")) {
                                 contactDAO = new ContactDAO(c);
-                                contact = contactDAO.findById(check);
+                                Contact contact = contactDAO.findById(check);
                                 if (contact.getId() != 0) {
                                     contactDAO.delete(check);
                                 }
@@ -831,9 +806,57 @@ public class EPA {
 
                         System.out.println("|-----------------------------------------------------|");
                         System.out.println();
-                        System.out.println("   ");
+                        System.out.println("  First, which employee you want to update?");
+                        inputs = new Scanner(System.in);
+                        answerCh = inputs.nextLong();
+                        employeeDAO = new EmployeeDAO(c);
+                        System.out.println("   So, there's info about him: ");
+                        employeeDAO.infoOfEmployee(answerCh, c);
+                        com = true;
+                        do {
+                            System.out.println("""
+                                    |------------------------------------------------------|
+                                    | What part of employee's account you want to update?  
+                                    |  1 - Depertment
+                                    |  2 - Job title
+                                    |  3 - Contact
+                                    |      - work number;
+                                    |      - location, street;
+                                    |  4 - Privilege's
+                                    |  5 - Login/Password
+                                    |  6 - Main info
+                                    |      - name;
+                                    |      - cabinet;
+                                    |      - entry day;
+                                    |  7 - Exit in main menu
+                                    |------------------------------------------------------|
+                                    """.indent(3));
+                            ans = input.nextLine();
+                            switch (ans) {
+                                case "1" -> { //1 - Depertment
+                                    DepartmentDAO departmentDAO = new DepartmentDAO(c);
+                                    departmentDAO.findAll().forEach(System.out::println);
 
+                                }
+                                case "2" -> { //2 - Job title
 
+                                }
+                                case "3" -> { //3 - Contact
+
+                                }
+                                case "4" -> { //4 - Privilege's
+
+                                }
+                                case "5" -> { //5 - Login/Password
+
+                                }
+                                case "6" -> { //6 - Main info
+
+                                }
+                                case "7" -> com = false; //7 - Exit in main menu
+                                default -> System.out.println("   Incorrect decision");
+                            }
+                        }while (com);
                         break;
 
                     case "9":
@@ -899,3 +922,5 @@ public class EPA {
 
     }
 }
+
+
