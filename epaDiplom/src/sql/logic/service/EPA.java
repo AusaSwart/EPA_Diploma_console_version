@@ -274,20 +274,21 @@ public class EPA {
             do {
                 System.out.println("________Main menu________");
                 System.out.println();
-                System.out.println("   Choose what you want to do now:");
-                System.out.println("     1 - Take a look on info about you");
-                System.out.println("     2 - Make a log statement");
-                System.out.println("     3 - Create a task");
-                System.out.println("     4 - Create an event");
-                System.out.println("     5 - Take a look on list of employees");
-                System.out.println("     6 - Update info about you");
+                System.out.println("""
+                                   Choose what you want to do now:
+                                   1 - Take a look on info about you
+                                   2 - Make a log statement
+                                   3 - Create a task
+                                   4 - Create an event
+                                   5 - Take a look on list of employees
+                                   6 - Update info about you""".indent(3));
                 if (privilege == 1) {      // For admin
-                    System.out.println("     7(*) - Delete Account");
-                    System.out.println("     8(*) - Correct Info in Account");
-                    System.out.println("     9(*) - Block Account"); //(?)
+                    System.out.println("""
+                                   7(*) - Delete Account
+                                   8(*) - Correct Info in Account
+                                   9(*) - Block Account""".indent(3));
                 }
-                System.out.println("     0 - End Session");
-                System.out.println();
+                System.out.println("     0 - End Session\n");
                 System.out.println("________________________________________________");
                 input = new Scanner(System.in);
                 decision = input.nextLine();
@@ -358,60 +359,61 @@ public class EPA {
                             logStatement.setIdApprover(answerCh);
                             logStatement.setIdEmployee(idEMPLOYEE);
                             String decisionCase;
-                            boolean vac = false;
+                            boolean vac = true;
                             do {
                                 System.out.println();
-                                System.out.println("   What type of leave do you interested in?");
-                                System.out.println("      1 - sick leave");
-                                System.out.println("      2 - vacation");
-                                System.out.println("      3 - at your own expense");
-                                System.out.println("      4 - dismissal");
-                                System.out.println("      5 - else");
+                                System.out.println(""" 
+                                            What type of leave do you interested in?
+                                              1 - sick leave
+                                              2 - vacation
+                                              3 - at your own expense
+                                              4 - dismissal
+                                              5 - else""".indent(3));
                                 input = new Scanner(System.in);
                                 decisionCase = input.nextLine();
                                 switch (decisionCase) {
                                     case "1" -> {
                                         logStatement.setTypeLeave(1);
-                                        vac = true;
+                                        vac = false;
                                     }
                                     case "2" -> {
                                         logStatement.setTypeLeave(2);
-                                        vac = true;
+                                        vac = false;
                                     }
                                     case "3" -> {
                                         logStatement.setTypeLeave(3);
-                                        vac = true;
+                                        vac = false;
                                     }
                                     case "4" -> {
                                         logStatement.setTypeLeave(4);
-                                        vac = true;
+                                        vac = false;
                                     }
                                     case "5" -> {
                                         logStatement.setTypeLeave(5);
-                                        vac = true;
+                                        vac = false;
                                     }
                                     default -> throw new IllegalStateException("Unexpected value: " + decisionCase);
                                 }
-                            } while (!vac);
+                            } while (vac);
 
                             System.out.println("   Any comments? y/n");
                             input = new Scanner(System.in);
                             decisionCase = input.nextLine();
-                            boolean com = false;
+                            boolean com = true;
                             do {
                                 if (decisionCase.equals("y")) {
                                     input = new Scanner(System.in);
                                     comment = input.nextLine();
                                     logStatement.setCommentLs(comment);       // Comment
-                                    com = true;
+                                    com = false;
                                     break;
                                 } else if (decisionCase.equals("n")) {
                                     System.out.println("   Okay");
                                     logStatement.setCommentLs(null);         // Comment
-                                    com = true;
+                                    com = false;
                                     break;
                                 } else System.out.println("   Wrong decision. Try again ");
-                            } while (!com);
+                            } while (com);
                             System.out.println();
                             System.out.println("   Period? (sum of days): ");
                             input = new Scanner(System.in);
@@ -533,8 +535,10 @@ public class EPA {
 
                         System.out.println("________________________________________________");
                         System.out.println();
-                        System.out.println("   Lets create a event. First we need to create event,\n" +
-                                "   then send them to the employeers.\n   Okay, write type of event:");
+                        System.out.println("""
+                                              Lets create a event. First we need to create event,
+                                              then send them to the employeers.
+                                              Okay, write type of event:""".indent(3));
                         System.out.println();
                         EventDAO eventDAO = new EventDAO(c);
                         Event event = new Event();
@@ -558,61 +562,64 @@ public class EPA {
                         long idEvent = event.getId();
                         System.out.println("_Table event created____");
                         System.out.println();
-                        System.out.println("   Now we need to send these to employees\n" +
-                                "Choose for whom");
-                        System.out.println("   1 - by department\n" +
-                                "   2 - by privilege\n" +
-                                "   3 - to all employees");
+                        System.out.println("""   
+                                              Now we need to send these to employees
+                                              Choose for whom""".indent(3));
+                        System.out.println("""
+                                              1 - by department
+                                              2 - by privilege
+                                              3 - to all employees""".indent(3));
                         System.out.println();
                         input = new Scanner(System.in);
                         String ans = input.nextLine();
                         boolean com = true;
                         do {
                             switch (ans) {
-                                case "1":
-                                    System.out.println("0 новенький \n" +
-                                            "  1 - ректорат\n" +
-                                            "  2 - пресс-служба\n" +
-                                            "  3 - сектор предупреждения и ликвидации чрезвычайных ситуацийn" +
-                                            "  4 - юридический отдел\n" +
-                                            "  5 - центр кадровой работы\n" +
-                                            "  6 - отдел по работе с персоналом\n" +
-                                            "  7 - отдел документационного обеспечения\\n" +
-                                            "  8 - сектор по работе со студентами\n" +
-                                            "  9 - бухгалтерия\n" +
-                                            "  10 - библиотека\n" +
-                                            "  11 - учебно-методическое управление\n" +
-                                            "  12 - центр информатизации и инновационных разработок БГУИР\n" +
-                                            "  13 - отдел вахтовой службы\n" +
-                                            "  14 - центр продвижения образовательных услуг\n" +
-                                            "  15 - факультет информационных технологий и управления\n" +
-                                            "  16 - факультет радиотехники и электроники\n" +
-                                            "  17 - факультет компьютерных систем и сетей\n" +
-                                            "  18 - факультет информационной безопасности\n" +
-                                            "  19 - инженерно-экономический факультет\n" +
-                                            "  20 - факультет доуниверситетской подготовки и профессиональной ориентации\n" +
-                                            "  21 - центр материально-технического обеспечения");
+                                case "1" -> {
+                                    System.out.println("""
+                                              0 - новенький
+                                              1 - ректорат
+                                              2 - пресс-служба
+                                              3 - сектор предупреждения и ликвидации чрезвычайных ситуацийn  
+                                              4 - юридический отдел
+                                              5 - центр кадровой работы
+                                              6 - отдел по работе с персоналом
+                                              7 - отдел документационного обеспечения  
+                                              8 - сектор по работе со студентами
+                                              9 - бухгалтерия
+                                              10 - библиотека
+                                              11 - учебно-методическое управление
+                                              12 - центр информатизации и инновационных разработок БГУИР
+                                              13 - отдел вахтовой службы
+                                              14 - центр продвижения образовательных услуг
+                                              15 - факультет информационных технологий и управления
+                                              16 - факультет радиотехники и электроники
+                                              17 - факультет компьютерных систем и сетей
+                                              18 - факультет информационной безопасности
+                                              19 - инженерно-экономический факультет
+                                              20 - факультет доуниверситетской подготовки и профессиональной ориентации
+                                              21 - центр материально-технического обеспечения""");
                                     System.out.println();
                                     inputs = new Scanner(System.in);
                                     answerCh = inputs.nextLong();
                                     employeeDAO = new EmployeeDAO(c);
                                     List<Long> employeesId = employeeDAO.findIDByDep(answerCh);
-                                    for (int i = 0; i < employeesId.size(); i++){
+                                    for (Long aLong : employeesId) {
                                         noticeEventDAO = new NoticeEventDAO(c);
                                         noticeEvent = new NoticeEvent();
-                                        noticeEvent.setId(employeesId.get(i));
+                                        noticeEvent.setId(aLong);
                                         noticeEvent.setIdEvent(idEvent);
                                         noticeEvent.setIdEmployee(idEMPLOYEE);
                                         noticeEventDAO.create(noticeEvent);
                                         System.out.println("_Table Notice event created____");
                                     }
                                     com = false;
-                                    break;
-
-                                case "2":
-                                    System.out.println("  1 - admin (can manipulate with another accounts)\n" +
-                                            "  2 - common user (can manipulate only own account)\n" +
-                                            "  3 - head (can manipulate own accont and also makes approves on logs)");
+                                }
+                                case "2" -> {
+                                    System.out.println("""
+                                             1 - admin (can manipulate with another accounts)
+                                             2 - common user (can manipulate only own account)
+                                             3 - head (can manipulate own account and also makes approves on logs)""".indent(2));
                                     System.out.println();
                                     inputs = new Scanner(System.in);
                                     int priv = inputs.nextInt();
@@ -620,37 +627,34 @@ public class EPA {
                                     employee = new Employee();
                                     employeeDAO.findIdByPriv(priv);
                                     List<Long> employeesIds = employeeDAO.findIdByPriv(priv);
-                                    for (int i = 0; i < employeesIds.size(); i++){
+                                    for (Long id : employeesIds) {
                                         noticeEventDAO = new NoticeEventDAO(c);
                                         noticeEvent = new NoticeEvent();
-                                        noticeEvent.setId(employeesIds.get(i));
+                                        noticeEvent.setId(id);
                                         noticeEvent.setIdEvent(idEvent);
                                         noticeEvent.setIdEmployee(idEMPLOYEE);
                                         noticeEventDAO.create(noticeEvent);
                                         System.out.println("_Table Notice event created____");
                                     }
                                     com = false;
-                                    break;
-
-                                case "3":
+                                }
+                                case "3" -> {
                                     employeeDAO = new EmployeeDAO(c);
                                     employee = new Employee();
                                     employeeDAO.findIdList();
                                     List<Long> employeesIdS = employeeDAO.findIdList();
-                                    for (int i = 0; i < employeesIdS.size(); i++){
+                                    for (Long id : employeesIdS) {
                                         noticeEventDAO = new NoticeEventDAO(c);
                                         noticeEvent = new NoticeEvent();
-                                        noticeEvent.setId(employeesIdS.get(i));
+                                        noticeEvent.setId(id);
                                         noticeEvent.setIdEvent(idEvent);
                                         noticeEvent.setIdEmployee(idEMPLOYEE);
                                         noticeEventDAO.create(noticeEvent);
                                         System.out.println("_Table Notice event created____");
                                     }
                                     com = false;
-                                    break;
-
-                                default:
-                                    System.out.println("   Incorrect decision, try else");
+                                }
+                                default -> System.out.println("   Incorrect decision, try else");
                             }
                         } while (com);
                         System.out.println("   We're done");
@@ -712,7 +716,7 @@ public class EPA {
                         employee = employeeDAO.findById(deleteEmployee);
                         long check = employee.getId();
                         if (check == deleteEmployee) {
-                            if (yesNo.equals("y") && idEMPLOYEE != check) {
+                            if (yesNo.equals("y")) {
                                 contactDAO = new ContactDAO(c);
                                 contact = contactDAO.findById(check);
                                 if (contact.getId() != 0) {
