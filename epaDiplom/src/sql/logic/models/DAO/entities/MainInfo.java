@@ -31,7 +31,6 @@ public class MainInfo implements DataTransferObject {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("___Main Info \n");
-        //sb.append("id_main_info=").append(id_main_info);
         sb.append("\n ").append(first_name);
         sb.append(" ").append(middle_name);
         sb.append(" ").append(last_name);

@@ -1,6 +1,7 @@
 package sql.logic.models.DAO;
 
 import sql.logic.models.DAO.entities.Contact;
+import sql.logic.models.DAO.entities.Login;
 import sql.logic.models.DAO.utilDAO.DataAccessObject;
 
 import java.sql.*;
@@ -19,6 +20,21 @@ public class ContactDAO extends DataAccessObject<Contact> {
     private static final String INSERT = "INSERT INTO contact (location_street, work_number, personal_number, " +
             "mail, id_main_info_contact) VALUES (?, ?, ?, ?, ?)";
     private static final String GET_ONE_BY_ONE = "SELECT * FROM contact ORDER BY id_main_info_contact";
+    private static final String GET_MAIL = "SELECT mail FROM contact WHERE mail = ?";
+    public Contact checkMail(String mail) {
+        Contact contact = new Contact();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_MAIL);){
+            statement.setString(1, mail);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                contact.setMail(rs.getString("mail"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return contact;
+    }
     public List<Contact> findAllInList(){
         List<Contact> contacts = new ArrayList<>();
         try(PreparedStatement statement = this.connection.prepareStatement(GET_ONE_BY_ONE);){

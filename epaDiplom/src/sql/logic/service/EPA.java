@@ -39,7 +39,7 @@ public class EPA {
             Connection c = dcm.getConnection();
             c.setAutoCommit(false);
             System.out.println("   Connected to the database!");
-            System.out.println("________________________________________________");
+            System.out.println("|-----------------------------------------------------|");
 
             // Employee greetings
 
@@ -82,7 +82,7 @@ public class EPA {
                         if (idEMPLOYEE == 0) {
                             System.out.println("Incorrect, try again");
                         } else {
-                            System.out.println("+++++ Hello, new employee №" + idEMPLOYEE + " +++++");
+                            System.out.println("---- Hello, new employee №" + idEMPLOYEE + " -----");
                             System.out.println();
                             if (privilege == 0) {
                                 System.out.println();
@@ -206,7 +206,7 @@ public class EPA {
             EmployeeTask employeeTask = employeeTaskDAO.findById(idEMPLOYEE);
             long idT = employeeTask.getIdTask();
             if (idT != 0) {
-                System.out.println("________________________________________________");
+                System.out.println("|-----------------------------------------------------|");
                 System.out.println();
                 System.out.println("   Today's tasks :");
                 System.out.println();
@@ -223,7 +223,7 @@ public class EPA {
             NoticeEvent noticeEvent = noticeEventDAO.findById(idEMPLOYEE);
             idT = noticeEvent.getIdEvent();
             if (idT != 0) {
-                System.out.println("________________________________________________");
+                System.out.println("|-----------------------------------------------------|");
                 System.out.println();
                 noticeEvent = noticeEventDAO.findComplicatedReqFE(idEMPLOYEE);
                 for (int i = 0; i < (noticeEvent.getNoticeEvents().size()); i++) {
@@ -243,7 +243,7 @@ public class EPA {
 
             idT = logStatement.getId();
             if (idT != 0 && (privilege == 1 || privilege == 3)) {
-                System.out.println("________________________________________________");
+                System.out.println("|-----------------------------------------------------|");
                 System.out.println();
                 boolean doe;
                 logStatement = logStatementDAO.findComplicatedReqLS(idEMPLOYEE);
@@ -278,8 +278,7 @@ public class EPA {
 
             // Main menu with available actions
 
-            System.out.println("________________________________________________");
-            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("|-----------------------------------------------------|");
             System.out.println();
             do {
                 System.out.println("________Main menu________");
@@ -299,7 +298,7 @@ public class EPA {
                             9(*) - Block Account""".indent(3));
                 }
                 System.out.println("     0 - End Session\n");
-                System.out.println("________________________________________________");
+                System.out.println("|-----------------------------------------------------|");
                 input = new Scanner(System.in);
                 decision = input.nextLine();
 
@@ -311,7 +310,7 @@ public class EPA {
 
                         // Main Info for employee about his account
 
-                        System.out.println("________________________________________________");
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
                         EmployeeDAO employeeDAO = new EmployeeDAO(c);
                         Employee employee = employeeDAO.findById(idEMPLOYEE);
@@ -346,14 +345,13 @@ public class EPA {
                         System.out.println("_Date of entry: " + mainInfo.getEntryD());
                         System.out.println("_Birth day: " + mainInfo.getBirthD());
                         System.out.println();
-                        System.out.println("________________________________________________");
                         break;
 
                     case "2":
 
                         // Make a log statement
 
-                        System.out.println("________________________________________________");
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
 
                         System.out.println("   Who is your boss?");
@@ -480,7 +478,7 @@ public class EPA {
 
                         // Create a task
 
-                        System.out.println("________________________________________________");
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
                         System.out.println("   Let's create task. You need to write in comment" +
                                 " what do you need");
@@ -541,7 +539,7 @@ public class EPA {
 
                         // Create an event
 
-                        System.out.println("________________________________________________");
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
                         System.out.println("""
                                 Lets create a event. First we need to create event,
@@ -672,7 +670,7 @@ public class EPA {
 
                         // See all employees
 
-                        System.out.println("________________________________________________");
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
                         System.out.println("   There is list of all employees :");
                         System.out.println();
@@ -686,7 +684,7 @@ public class EPA {
                         List<MainInfo> mainInfos = mainInfoDAO.findAllInList();
                         List<Contact> contacts = contactDAO.findAllInList();
                         for (int i = 0; i < employees.size(); i++) {
-                            System.out.println("-------------------------------|");
+                            System.out.println("|------------------------------|");
                             System.out.println(employees.get(i));
                             System.out.println(mainInfos.get(i));
                             System.out.println(contacts.get(i));
@@ -694,7 +692,7 @@ public class EPA {
                             jobEmployee = jobEmployeeDAO.findComplicatedReqFJ(employeesID.get(i));
                             jobEmployee.getJobTitles().forEach(System.out::println);
                             System.out.println();
-                            System.out.println("-------------------------------|");
+                            System.out.println("|------------------------------|");
                         }
                         System.out.println();
                         System.out.println("   This is end of list");
@@ -705,7 +703,7 @@ public class EPA {
 
                         // Change login\\password && contact's
 
-                        System.out.println("________________________________________________");
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
                         System.out.println("   You want to change login/password (1) or contacts (2)?");
                         input = new Scanner(System.in);
@@ -714,32 +712,64 @@ public class EPA {
                             case "1" -> {
                                 LoginDAO loginDAO = new LoginDAO(c);
                                 Login login = new Login();
-                                System.out.println("  Input new login:");
-                                String loginUser = input.nextLine();
+                                String loginUser;
+                                boolean check = true;
+                                do {
+                                    System.out.println("  Input new login:");
+                                    loginUser = input.nextLine();
+                                    login = loginDAO.checkLogin(loginUser);
+                                    if (login.getLoginUser() == null) {
+                                        System.out.println("   Okay, now password");
+                                        System.out.println();
+                                        check = false;
+                                    } else {
+                                        System.out.println("   Incorrect, this login is already taken ");
+                                        System.out.println("   Try again");
+                                    }
+                                } while (check);
                                 System.out.println("  New password:");
                                 String passwordUser = input.nextLine();
+                                login = new Login();
                                 login.setLoginUser(loginUser);
                                 login.setPasswordUser(passwordUser);
                                 login.setId(idEMPLOYEE);
                                 loginDAO.update(login);
+                                System.out.println("___ Table login updated _____");
                             }
                             case "2" -> {
                                 contactDAO = new ContactDAO(c);
                                 contact = new Contact();
                                 System.out.println();
-                                System.out.println("  Input new mail:");
-                                String mail = input.nextLine();
-                                System.out.println("  Work number:");
-                                input = new Scanner(System.in);
-                                long wNum = input.nextLong();
-                                System.out.println("  Personal number:");
-                                input = new Scanner(System.in);
-                                long pNum = input.nextLong();
-                                contact.setWorkNumber(wNum);
-                                contact.setPersonalNumber(pNum);
-                                contact.setMail(mail);
-                                contact.setId(idEMPLOYEE);
-                                contactDAO.update(contact);
+                                String mail;
+                                String street;
+                                boolean check = true;
+                                do {
+                                    System.out.println("  Input new mail:");
+                                    mail = input.nextLine();
+                                    contact = contactDAO.checkMail(mail);
+                                    if ( contact.getMail() == null) {
+                                        System.out.println("   Okay, now work number");
+                                        contact = contactDAO.findById(idEMPLOYEE);
+                                        street = contact.getLocationStreet();
+                                        input = new Scanner(System.in);
+                                        long wNum = input.nextLong();
+                                        System.out.println("  Personal number:");
+                                        input = new Scanner(System.in);
+                                        long pNum = input.nextLong();
+                                        contact.setLocationStreet(street);
+                                        contact.setWorkNumber(wNum);
+
+                                        contact.setPersonalNumber(pNum);
+                                        contact.setMail(mail);
+                                        contact.setId(idEMPLOYEE);
+                                        contactDAO.update(contact);
+                                        System.out.println("___ Table contact updated _____");
+                                        check = false;
+                                    } else {
+                                        System.out.println("   Incorrect, this mail is already taken ");
+                                        System.out.println("   Try again");
+                                    }
+                                } while (check);
                             }
                             default -> {
                                 System.out.println("  Incorrect decision");
@@ -750,8 +780,8 @@ public class EPA {
                     case "7":
 
                         // Delete employee's account (Admin)
-                        // don't work
-                        System.out.println("________________________________________________");
+
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
                         System.out.println("   Choose what employee you want to delete?");
                         input = new Scanner(System.in);
@@ -799,7 +829,7 @@ public class EPA {
 
                         // Correct Info in employee's account (Admin)
 
-                        System.out.println("________________________________________________");
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
                         System.out.println("   ");
 
@@ -810,7 +840,7 @@ public class EPA {
 
                         // Block employee's account (Admin)
 
-                        System.out.println("________________________________________________");
+                        System.out.println("|-----------------------------------------------------|");
                         System.out.println();
                         System.out.println("   Whose account you want to block?");
                         input = new Scanner(System.in);
@@ -853,8 +883,8 @@ public class EPA {
             } while (!decision.equals("0"));
 
             System.out.println();
-            System.out.println("|________Have a nice day________|");
-            System.out.println("________________________________________________");
+            System.out.println("|-------------------Have a nice day-------------------|");
+            System.out.println("|-----------------------------------------------------|");
 
             //  Block of exceptions
 
