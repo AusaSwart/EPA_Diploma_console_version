@@ -180,6 +180,16 @@ public class EPA {
                     System.out.println("___Login created___");
                     System.out.println();
 
+                    // Create job employee table
+
+                    JobEmployeeDAO jobEmployeeDAO = new JobEmployeeDAO(c);
+                    JobEmployee jobEmployee = new JobEmployee();
+                    jobEmployee.setIdJobTitle(212);   // trainee
+                    jobEmployee.setId(idEMPLOYEE);
+                    jobEmployeeDAO.create(jobEmployee);
+                    System.out.println("___Job title created___");
+                    System.out.println();
+
                     System.out.println("+++++ Hello, new employee №" + idEMPLOYEE + " +++++");
                     System.out.println();
                     System.out.println("|__ We're done with registration __|");

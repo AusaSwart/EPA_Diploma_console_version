@@ -19,7 +19,7 @@ public class JobEmployeeDAO extends DataAccessObject<JobEmployee> {
     private static final String GET_ONE = "SELECT id_employee, id_job_title FROM job_employee WHERE id_employee=?";
     private static final String DELETE = "DELETE FROM job_employee WHERE id_employee = ?";
     private static final String UPDATE = "UPDATE job_employee SET id_job_title = ? WHERE id_employee = ?";
-    private static final String INSERT = "INSERT INTO job_employee (id_job_title) VALUES (?)";
+    private static final String INSERT = "INSERT INTO job_employee (id_job_title, id_employee) VALUES (?, ?)";
     private static final String GET_COMPLICATED = "SELECT jt.job_title_name FROM public.job_employee je JOIN" +
             " public.job_title jt ON jt.id = je.id_job_title WHERE je.id_employee = ?";
 
@@ -95,14 +95,23 @@ public class JobEmployeeDAO extends DataAccessObject<JobEmployee> {
 
     @Override
     public JobEmployee create(JobEmployee dto) {
-        try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
-            statement.setLong(1, dto.getIdJobTitle());
-            statement.execute();
+        JobEmployee jobEmployee = new JobEmployee();
+        try{
+            this.connection.setAutoCommit(false);
         }catch(SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return dto;
+        try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
+            statement.setLong(1, dto.getIdJobTitle());
+            statement.setLong(2, dto.getId());
+            statement.execute();
+            this.connection.commit();
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return jobEmployee;
     }
 
     @Override
