@@ -44,11 +44,11 @@ public class EPA {
             // Employee greetings
 
             System.out.println("""
-                                 |____________Hello, Employee. Present yourself_____________|
-                                 |   Please, tape :                                         |
-                                 |  1 - If you are already have login                       |
-                                 |  2 - If you are need to register                         |
-                                 |----------------------------------------------------------|""".indent(3));
+                    |____________Hello, Employee. Present yourself_____________|
+                    |   Please, tape :                                         |
+                    |  1 - If you are already have login                       |
+                    |  2 - If you are need to register                         |
+                    |----------------------------------------------------------|""".indent(3));
 
             System.out.println();
 
@@ -94,9 +94,9 @@ public class EPA {
                             if (privilege == 0) {
                                 System.out.println();
                                 System.out.println("""
-                                                  ++++++++++++++++++++++++++++++
-                                                  +   You have been blocked    +
-                                                  ++++++++++++++++++++++++++++++""");
+                                        ++++++++++++++++++++++++++++++
+                                        +   You have been blocked    +
+                                        ++++++++++++++++++++++++++++++""");
 
                                 System.exit(0);
                             }
@@ -216,7 +216,7 @@ public class EPA {
                     contactDAO.create(contact);
                     System.out.println("___Contact created___");
 
-                    System.out.println("+++++ Hello, new employee №" + idEMPLOYEE + " +++++");
+                    System.out.println("|----- Hello, new employee №" + idEMPLOYEE + " -----|");
                     System.out.println();
                     System.out.println("|__ We're done with registration __|");
                     done = true;
@@ -739,7 +739,7 @@ public class EPA {
                                     System.out.println("  Input new mail:");
                                     mail = input.nextLine();
                                     contact = contactDAO.checkMail(mail);
-                                    if ( contact.getMail() == null) {
+                                    if (contact.getMail() == null) {
                                         System.out.println("   Okay, now work number");
                                         contact = contactDAO.findById(idEMPLOYEE);
                                         street = contact.getLocationStreet();
@@ -825,7 +825,7 @@ public class EPA {
                         System.out.println();
                         System.out.println("  First, which employee you want to update?");
                         inputs = new Scanner(System.in);
-                        answerCh = inputs.nextLong();
+                        answerCh = inputs.nextLong(); // here id of employee
                         employeeDAO = new EmployeeDAO(c);
                         System.out.println("   So, there's info about him: ");
                         employeeDAO.infoOfEmployee(answerCh, c);
@@ -834,18 +834,10 @@ public class EPA {
                             System.out.println("""
                                     |------------------------------------------------------|
                                     | What part of employee's account you want to update?  
-                                    |  1 - Depertment
+                                    |  1 - Depertment && Privilege's
                                     |  2 - Job title
-                                    |  3 - Contact
-                                    |      - work number;
-                                    |      - location, street;
-                                    |  4 - Privilege's
-                                    |  5 - Login/Password
-                                    |  6 - Main info
-                                    |      - name;
-                                    |      - cabinet;
-                                    |      - entry day;
-                                    |  7 - Exit in main menu
+                                    |  3 - Password
+                                    |  4 - Exit in main menu
                                     |------------------------------------------------------|
                                     """.indent(3));
                             ans = input.nextLine();
@@ -853,27 +845,74 @@ public class EPA {
                                 case "1" -> { //1 - Depertment
                                     DepartmentDAO departmentDAO = new DepartmentDAO(c);
                                     departmentDAO.findAll().forEach(System.out::println);
-
+                                    System.out.println("""
+                                               Here's examples of all departments at this moment. Choose id
+                                               of department in which you want to define an employee""".indent(3));
+                                    inputs = new Scanner(System.in);
+                                    long ids = inputs.nextLong();
+                                    System.out.println("""
+                                            There's type of privilege's:
+                                            0 - account blocked (can't do anything)
+                                            1 - admin (can manipulate with another accounts)
+                                            2 - common user (can manipulate only own account)
+                                            3 - head (can manipulate own accont and also makes approves on logs
+                                            
+                                            Choose number of privileges, what you want to set:""".indent(3));
+                                    inputs = new Scanner(System.in);
+                                    int priv = inputs.nextInt();
+                                    employee = employeeDAO.findById(answerCh);
+                                    employee.setPrivilege(priv);
+                                    employee.setId(answerCh);
+                                    employee.setIdDep(ids);
+                                    employeeDAO.update(employee);
+                                    System.out.println("   Privileges and Department are changed");
                                 }
                                 case "2" -> { //2 - Job title
 
-                                }
-                                case "3" -> { //3 - Contact
 
-                                }
-                                case "4" -> { //4 - Privilege's
+                                    // problem with few tables and unique key's
 
+                                    jobEmployeeDAO = new JobEmployeeDAO(c);
+                                    JobEmployee jobEmployee = new JobEmployee();
+                                    System.out.println("   Here's ll Job title's, choose needed one:");
+                                    JobTitleDAO jodTitleDAO = new JobTitleDAO(c);
+                                    jodTitleDAO.findAll().forEach(System.out::println);
+                                    com = true;
+                                    do {
+                                        System.out.println();
+                                        inputs = new Scanner(System.in);
+                                        long ids = inputs.nextLong();
+                                        jobEmployeeDAO = new JobEmployeeDAO(c);
+                                        jobEmployee = new JobEmployee();
+                                        jobEmployee.setIdJobTitle(ids);
+                                        jobEmployee.setId(answerCh);
+                                        jobEmployeeDAO.update(jobEmployee);
+                                        System.out.println("   Name of job are updated, do you need one more title? y/n");
+                                        input = new Scanner(System.in);
+                                        ans = input.nextLine();
+                                        if(ans.equals("n")){  com = false; }
+                                        else {
+                                            System.out.println("   Okay");
+                                        }
+                                    } while (com);
                                 }
-                                case "5" -> { //5 - Login/Password
-
+                                case "3" -> { //3 - Password
+                                    LoginDAO loginDAO = new LoginDAO(c);
+                                    System.out.println("   Write new password:");
+                                    Login login = loginDAO.findById(answerCh);
+                                    String loginUs = login.getLoginUser();
+                                    input = new Scanner(System.in);
+                                    String passwordUs = input.nextLine();
+                                    login.setPasswordUser(passwordUs);
+                                    login.setLoginUser(loginUs);
+                                    login.setId(answerCh);
+                                    loginDAO.update(login);
+                                    System.out.println("   Password updated");
                                 }
-                                case "6" -> { //6 - Main info
-
-                                }
-                                case "7" -> com = false; //7 - Exit in main menu
+                                case "4" -> com = false; //7 - Exit in main menu
                                 default -> System.out.println("   Incorrect decision");
                             }
-                        }while (com);
+                        } while (com);
                         break;
 
                     case "9":

@@ -1,5 +1,6 @@
 package sql.logic.models.DAO;
 
+import sql.logic.models.DAO.entities.JobEmployee;
 import sql.logic.models.DAO.entities.JobTitle;
 import sql.logic.models.DAO.utilDAO.DataAccessObject;
 
@@ -7,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JobTitleDAO extends DataAccessObject<JobTitle> {
@@ -14,10 +16,29 @@ public class JobTitleDAO extends DataAccessObject<JobTitle> {
     public JobTitleDAO(Connection connection) {
         super(connection);
     }
-    private static final String GET_ONE = "SELECT id_job_title, job_title_name FROM job_title WHERE id_job_title=?";
+    private static final String GET_ONE = "SELECT id, job_title_name FROM job_title WHERE id=?";
     private static final String DELETE = "DELETE FROM job_title WHERE id_job_title = ?";
-    private static final String UPDATE = "UPDATE job_title SET job_title_name = ?  WHERE id_job_title = ?";
+    private static final String UPDATE = "UPDATE job_title SET job_title_name = ?  WHERE id = ?";
     private static final String INSERT = "INSERT INTO job_title (job_title_name) VALUES (?)";
+    private static final String GET_NAMES = "SELECT job_title_name, id FROM public.job_title " +
+            "ORDER BY id";
+
+    public List<JobTitle> findAll() {
+        List<JobTitle> jobTitles = new ArrayList<>();
+        try(PreparedStatement statement = this.connection.prepareStatement(GET_NAMES);){
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                JobTitle jobTitle = new JobTitle();
+                jobTitle.setJobTitleName(rs.getString(1));
+                jobTitle.setId(rs.getLong(2));
+                jobTitles.add(jobTitle);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return jobTitles;
+    }
 
     @Override
     public JobTitle findById(long id) {
@@ -34,11 +55,6 @@ public class JobTitleDAO extends DataAccessObject<JobTitle> {
             throw new RuntimeException(e);
         }
         return jobTitle;
-    }
-
-    @Override
-    public List<JobTitle> findAll() {
-        return null;
     }
 
     @Override

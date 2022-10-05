@@ -67,25 +67,13 @@ public class JobEmployeeDAO extends DataAccessObject<JobEmployee> {
     @Override
     public JobEmployee update(JobEmployee dto) {
         JobEmployee jobEmployee = null;
-        try{
-            this.connection.setAutoCommit(false);
-        }catch(SQLException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
         try(PreparedStatement statement = this.connection.prepareStatement(UPDATE);){
-            statement.setLong(2, dto.getIdJobTitle());
+            statement.setLong(1, dto.getIdJobTitle());
             statement.setLong(2, dto.getId());
             statement.execute();
             this.connection.commit();
             jobEmployee = this.findById(dto.getId());
         }catch(SQLException e){
-            try{
-                this.connection.rollback();
-            }catch (SQLException sqle){
-                e.printStackTrace();
-                throw new RuntimeException(sqle);
-            }
             e.printStackTrace();
             throw new RuntimeException(e);
         }
