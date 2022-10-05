@@ -86,11 +86,10 @@ public class EPA {
                         if (idEMPLOYEE == 0) {
                             System.out.println("Incorrect, try again");
                         } else {
-                            System.out.println("""
-                                                  |---------------------------------------------------|
-                                                  |----- Hello, new employee №" + idEMPLOYEE + " -----|
-                                                  |___________________________________________________|
-                                                     \\-------We are done with the entrance------/""");
+                            System.out.println("|--------------------------------------------------|");
+                            System.out.println("|---------- Hello, new employee №" + idEMPLOYEE + " ----------|");
+                            System.out.println("|__________________________________________________|");
+                            System.out.println("    \\-------We are done with the entrance------/");
                             System.out.println();
                             if (privilege == 0) {
                                 System.out.println();
@@ -197,6 +196,25 @@ public class EPA {
                     jobEmployeeDAO.create(jobEmployee);
                     System.out.println("___Job title created___");
                     System.out.println();
+
+                    // Create contact table
+
+                    ContactDAO contactDAO = new ContactDAO(c);
+                    Contact contact = new Contact();
+                    System.out.println("   Enter ur mail: ");
+                    loginUser = input.nextLine();
+                    input = new Scanner(System.in);
+                    System.out.println("   Input your work number");
+                    long wNum = input.nextLong();
+                    System.out.println("   Input your personal number");
+                    long pNum = input.nextLong();
+                    contact.setLocationStreet(null);
+                    contact.setWorkNumber(wNum);
+                    contact.setPersonalNumber(pNum);
+                    contact.setMail(loginUser);
+                    contact.setId(idEMPLOYEE);
+                    contactDAO.create(contact);
+                    System.out.println("___Contact created___");
 
                     System.out.println("+++++ Hello, new employee №" + idEMPLOYEE + " +++++");
                     System.out.println();
@@ -653,7 +671,6 @@ public class EPA {
                         MainInfoDAO mainInfoDAO = new MainInfoDAO(c);
                         ContactDAO contactDAO = new ContactDAO(c);
                         JobEmployeeDAO jobEmployeeDAO = new JobEmployeeDAO(c);
-                        JobEmployee jobEmployee = new JobEmployee();
                         List<Employee> employees = employeeDAO.findAllInList();
                         List<Long> employeesID = employeeDAO.findIdList();
                         List<MainInfo> mainInfos = mainInfoDAO.findAllInList();
@@ -664,7 +681,7 @@ public class EPA {
                             System.out.println(mainInfos.get(i));
                             System.out.println(contacts.get(i));
                             System.out.println("___Job title:");
-                            jobEmployee = jobEmployeeDAO.findComplicatedReqFJ(employeesID.get(i));
+                            JobEmployee jobEmployee = jobEmployeeDAO.findComplicatedReqFJ(employeesID.get(i));
                             jobEmployee.getJobTitles().forEach(System.out::println);
                             System.out.println();
                             System.out.println("|------------------------------|");

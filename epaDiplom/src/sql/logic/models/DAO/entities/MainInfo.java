@@ -34,7 +34,7 @@ public class MainInfo implements DataTransferObject {
         sb.append("\n ").append(first_name);
         sb.append(" ").append(middle_name);
         sb.append(" ").append(last_name);
-        sb.append("\n Cabinet and office:").append(cabinet_office);
+        sb.append("\n Cabinet and office: ").append(cabinet_office);
         sb.append("\n Birth day: '").append(birth_d).append('\'');
         sb.append("\n Entry day: '").append(entry_d).append('\'');
         sb.append("\n");

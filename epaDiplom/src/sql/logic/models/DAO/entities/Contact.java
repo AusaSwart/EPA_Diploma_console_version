@@ -46,7 +46,6 @@ public class Contact implements DataTransferObject {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("____Contact");
-        //sb.append(" id_main_info_contact=").append(id_main_info_contact);
         sb.append("\n Location street is '").append(location_street).append('\'');
         sb.append("\n Work number: ").append(work_number);
         sb.append("\n Personal number: ").append(personal_number);
