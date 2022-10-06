@@ -192,7 +192,7 @@ public class EPA {
                     JobEmployeeDAO jobEmployeeDAO = new JobEmployeeDAO(c);
                     JobEmployee jobEmployee = new JobEmployee();
                     jobEmployee.setIdJobTitle(212);   // trainee
-                    jobEmployee.setId(idEMPLOYEE);
+                    jobEmployee.setIdEmployee(idEMPLOYEE);
                     jobEmployeeDAO.create(jobEmployee);
                     System.out.println("___Job title created___");
                     System.out.println();
@@ -846,8 +846,8 @@ public class EPA {
                                     DepartmentDAO departmentDAO = new DepartmentDAO(c);
                                     departmentDAO.findAll().forEach(System.out::println);
                                     System.out.println("""
-                                               Here's examples of all departments at this moment. Choose id
-                                               of department in which you want to define an employee""".indent(3));
+                                            Here's examples of all departments at this moment. Choose id
+                                            of department in which you want to define an employee""".indent(3));
                                     inputs = new Scanner(System.in);
                                     long ids = inputs.nextLong();
                                     System.out.println("""
@@ -856,7 +856,7 @@ public class EPA {
                                             1 - admin (can manipulate with another accounts)
                                             2 - common user (can manipulate only own account)
                                             3 - head (can manipulate own accont and also makes approves on logs
-                                            
+                                                                                        
                                             Choose number of privileges, what you want to set:""".indent(3));
                                     inputs = new Scanner(System.in);
                                     int priv = inputs.nextInt();
@@ -869,30 +869,49 @@ public class EPA {
                                 }
                                 case "2" -> { //2 - Job title
 
-
-                                    // problem with few tables and unique key's
-
                                     jobEmployeeDAO = new JobEmployeeDAO(c);
-                                    JobEmployee jobEmployee = new JobEmployee();
+                                    jobEmployeeDAO.findByIdEmp(answerCh).forEach(System.out::println);
                                     System.out.println("   Here's ll Job title's, choose needed one:");
                                     JobTitleDAO jodTitleDAO = new JobTitleDAO(c);
                                     jodTitleDAO.findAll().forEach(System.out::println);
                                     com = true;
                                     do {
                                         System.out.println();
+                                        System.out.println("   Choose id of the name of job title, then id of line" +
+                                                " in which you want to change job title");
+                                        System.out.println();
                                         inputs = new Scanner(System.in);
                                         long ids = inputs.nextLong();
+                                        long idJE = inputs.nextLong();
                                         jobEmployeeDAO = new JobEmployeeDAO(c);
-                                        jobEmployee = new JobEmployee();
+                                        JobEmployee jobEmployee = new JobEmployee();
                                         jobEmployee.setIdJobTitle(ids);
-                                        jobEmployee.setId(answerCh);
+                                        jobEmployee.setIdEmployee(answerCh);
+                                        jobEmployee.setId(idJE);
                                         jobEmployeeDAO.update(jobEmployee);
-                                        System.out.println("   Name of job are updated, do you need one more title? y/n");
+                                        System.out.println("   Name of job are updated, do you need to change one more title? (y/n)" +
+                                                "   or create new? (cr)");
                                         input = new Scanner(System.in);
                                         ans = input.nextLine();
-                                        if(ans.equals("n")){  com = false; }
+                                        if (ans.equals("n")) {
+                                            System.out.println("   Okay, we're done");
+                                            com = false;
+                                        } else if (ans.equals("cr")) {
+                                            System.out.println("   Okay, write id of job title");
+                                            ids = inputs.nextLong();
+                                            jobEmployee.setIdJobTitle(ids);
+                                            jobEmployee.setIdEmployee(answerCh);
+                                            jobEmployeeDAO.create(jobEmployee);
+                                            System.out.println("   New job title created");
+                                            System.out.println("   Need something more? (y/n)");
+                                            ans = input.nextLine();
+                                            if(ans.equals("n")){
+                                                System.out.println("   Okay, we're done");
+                                                com = false;
+                                            } else System.out.println("   Okay, continue");
+                                        }
                                         else {
-                                            System.out.println("   Okay");
+                                            System.out.println("   Okay, continue");
                                         }
                                     } while (com);
                                 }

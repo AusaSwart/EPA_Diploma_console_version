@@ -150,12 +150,6 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
             this.connection.commit();
             employee = this.findById(dto.getId());
         } catch (SQLException e) {
-            try {
-                this.connection.rollback();
-            } catch (SQLException sqle) {
-                e.printStackTrace();
-                throw new RuntimeException(sqle);
-            }
             e.printStackTrace();
             throw new RuntimeException(e);
         }

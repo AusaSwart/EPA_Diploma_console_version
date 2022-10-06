@@ -8,14 +8,22 @@ public class JobEmployee implements DataTransferObject {
 
     private long id_employee;
     private long id_job_title;
+    private long id;
     private List<JobEmployee> jobEmployees;
     private List<JobTitle> jobTitles;
 
     public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+    public long getIdEmployee() {
         return id_employee;
     }
 
-    public void setId(long id_employee) {
+    public void setIdEmployee(long id_employee) {
         this.id_employee = id_employee;
     }
 
@@ -36,6 +44,7 @@ public class JobEmployee implements DataTransferObject {
         final StringBuilder sb = new StringBuilder(" ");
         sb.append("Employee №").append(id_employee);
         sb.append(" id of job title № ").append(id_job_title);
+        sb.append(" , id - ").append(id);
         sb.append("\n");
         return sb.toString();
     }
