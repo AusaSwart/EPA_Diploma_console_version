@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -791,6 +792,11 @@ public class EPA {
                         long check = employee.getId();
                         if (check == deleteEmployee) {
                             if (yesNo.equals("y")) {
+                                jobEmployeeDAO = new JobEmployeeDAO(c);
+                                List <JobEmployee> jobEmployees = jobEmployeeDAO.findByIdEmp(check);
+                                for (int i = 0; i < jobEmployees.size(); i++) {
+                                    jobEmployeeDAO.deleteByEntitie(jobEmployees.get(i));
+                                }
                                 contactDAO = new ContactDAO(c);
                                 Contact contact = contactDAO.findById(check);
                                 if (contact.getId() != 0) {

@@ -128,7 +128,23 @@ public class JobEmployeeDAO extends DataAccessObject<JobEmployee> {
         return jobEmployee;
     }
 
-    @Override
+    public void deleteByEntitie(JobEmployee dto) {
+        try{
+            this.connection.setAutoCommit(false);
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        try(PreparedStatement statement = this.connection.prepareStatement(DELETE);){
+            statement.setLong(1, dto.getId());
+            statement.executeUpdate();
+            this.connection.commit();
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+@Override
     public void delete(long id) {
         try{
             this.connection.setAutoCommit(false);
