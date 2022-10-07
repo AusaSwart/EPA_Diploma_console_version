@@ -191,7 +191,7 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
         }
     }
 
-    public void infoOfEmployee (long idEMPLOYEE, Connection c) {
+    public void infoOfEmployee (long idEMPLOYEE, Connection c,int privilege) {
         System.out.println("|-----------------------------------------------------|");
         System.out.println();
         EmployeeDAO employeeDAO = new EmployeeDAO(c);
@@ -228,10 +228,12 @@ public class EmployeeDAO extends DataAccessObject<Employee> {
         System.out.println("_Date of entry: " + mainInfo.getEntryD());
         System.out.println("_Birth day: " + mainInfo.getBirthD());
         System.out.println();
-        System.out.println("_Login____");
-        System.out.println("   Login: " + login.getLoginUser());
-        System.out.println("   Password: " + login.getPasswordUser());
-        System.out.println();
+        if(privilege == 1) {
+            System.out.println("_Login____");
+            System.out.println("   Login: " + login.getLoginUser());
+            System.out.println("   Password: " + login.getPasswordUser());
+            System.out.println();
+        }
     }
 
 }

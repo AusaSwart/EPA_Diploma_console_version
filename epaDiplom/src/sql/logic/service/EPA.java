@@ -335,7 +335,7 @@ public class EPA {
                         // Main Info for employee about his account
 
                         EmployeeDAO employeeDAO = new EmployeeDAO(c);
-                        employeeDAO.infoOfEmployee(idEMPLOYEE, c);
+                        employeeDAO.infoOfEmployee(idEMPLOYEE, c, 1);
                         break;
 
                     case "2":
@@ -467,7 +467,7 @@ public class EPA {
 
                     case "3":
 
-                        // Create a task
+                        // Create a task (add more functions, fix table task: in bd table hae extra column name_task)
 
                         System.out.println("|-----------------------------------------------------|");
                         System.out.println();
@@ -527,7 +527,7 @@ public class EPA {
 
                     case "4":
 
-                        // Create an event
+                        // Create an event (add creation event's one-by-one, check on self-sending)
 
                         System.out.println("|-----------------------------------------------------|");
                         System.out.println();
@@ -668,7 +668,7 @@ public class EPA {
                         List<Long> employeesID = employeeDAO.findIdList();
                         for (Long aLong : employeesID) {
                             System.out.println("|------------------------------|");
-                            employeeDAO.infoOfEmployee(aLong, c);
+                            employeeDAO.infoOfEmployee(aLong, c, privilege);
                             System.out.println("|------------------------------|");
                         }
                         System.out.println();
@@ -818,7 +818,7 @@ public class EPA {
                         answerCh = inputs.nextLong(); // here id of employee
                         employeeDAO = new EmployeeDAO(c);
                         System.out.println("   So, there's info about him: ");
-                        employeeDAO.infoOfEmployee(answerCh, c);
+                        employeeDAO.infoOfEmployee(answerCh, c, privilege);
                         com = true;
                         do {
                             System.out.println("""
@@ -971,7 +971,7 @@ public class EPA {
                                         " have been blocked");
                             } else if (yesNo.equals("n")) {
                                 System.out.println("   Okay");
-                            } else System.out.println("   Wrong desicion");
+                            } else System.out.println("   Wrong decision");
                             break;
                         } else {
                             System.out.println("   Such id doesn't exist");
