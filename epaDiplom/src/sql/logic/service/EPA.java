@@ -513,7 +513,7 @@ public class EPA {
                                 employeeTaskDAO.create(employeeTask);
                                 System.out.println("   Table created");
                                 System.out.println();
-                            }else if(answer == 1){
+                            } else if (answer == 1) {
                                 System.out.println("   Okay, we are done");
                                 break;
                             } else {
@@ -564,7 +564,8 @@ public class EPA {
                         System.out.println("""
                                 1 - by department
                                 2 - by privilege
-                                3 - to all employees""".indent(3));
+                                3 - to all employees
+                                4 - individual or few different""".indent(3));
                         System.out.println();
                         input = new Scanner(System.in);
                         String ans = input.nextLine();
@@ -648,6 +649,41 @@ public class EPA {
                                         noticeEventDAO.create(noticeEvent);
                                         System.out.println("_Table Notice event created____");
                                     }
+                                    com = false;
+                                }
+                                case "4" -> {
+                                    boolean com2 = true;
+                                    boolean com1 = true;
+                                    do {
+                                        System.out.println("   Input id of employee you needed:");
+                                        do {
+                                            inputs = new Scanner(System.in);
+                                            answerCh = inputs.nextLong();
+                                            employeeDAO = new EmployeeDAO(c);
+                                            employee = employeeDAO.findById(answerCh);
+                                            if (employee.getId() == answerCh && employee.getId() != 0 && answerCh != 0) {
+                                                noticeEventDAO = new NoticeEventDAO(c);
+                                                noticeEvent = new NoticeEvent();
+                                                noticeEvent.setId(answerCh);
+                                                noticeEvent.setIdEvent(idEvent);
+                                                noticeEvent.setIdEmployee(idEMPLOYEE);
+                                                noticeEventDAO.create(noticeEvent);
+                                                System.out.println("_Table Notice event created____");
+                                                com2 = false;
+                                            } else System.out.println("   Incorrect id");
+                                        } while (com2);
+                                        System.out.println("   Do you need someone else on this meet?  y/n");
+                                        input = new Scanner(System.in);
+                                        String bufferEvent = input.nextLine();
+                                        if (bufferEvent.equals("n")) {
+                                            System.out.println("   Okay, we're done");
+                                            com1 = false;
+                                        } else if (bufferEvent.equals("y")) { System.out.println("   Okay, continue");
+                                        } else {
+                                            System.out.println("   Incorrect decision");
+                                            break;
+                                        }
+                                    }while (com1);
                                     com = false;
                                 }
                                 default -> System.out.println("   Incorrect decision, try else");
@@ -777,7 +813,7 @@ public class EPA {
                         if (check == deleteEmployee) {
                             if (yesNo.equals("y")) {
                                 JobEmployeeDAO jobEmployeeDAO = new JobEmployeeDAO(c);
-                                List <JobEmployee> jobEmployees = jobEmployeeDAO.findByIdEmp(check);
+                                List<JobEmployee> jobEmployees = jobEmployeeDAO.findByIdEmp(check);
                                 for (JobEmployee jobEmployee : jobEmployees) {
                                     jobEmployeeDAO.deleteByEntitie(jobEmployee);
                                 }
@@ -835,7 +871,7 @@ public class EPA {
                                 case "1" -> { //1 - Depertment && Privilege
                                     System.out.println("   You want to change Department (1) or Privileges? (2)");
                                     String dec = input.nextLine();
-                                    if(dec.equals("1")) {
+                                    if (dec.equals("1")) {
                                         DepartmentDAO departmentDAO = new DepartmentDAO(c);
                                         departmentDAO.findAll().forEach(System.out::println);
                                         System.out.println();
@@ -908,12 +944,11 @@ public class EPA {
                                             System.out.println("   New job title created");
                                             System.out.println("   Need something more? (y/n)");
                                             ans = input.nextLine();
-                                            if(ans.equals("n")){
+                                            if (ans.equals("n")) {
                                                 System.out.println("   Okay, we're done");
                                                 com = false;
                                             } else System.out.println("   Okay, continue");
-                                        }
-                                        else {
+                                        } else {
                                             System.out.println("   Okay, continue");
                                         }
                                     } while (com);
