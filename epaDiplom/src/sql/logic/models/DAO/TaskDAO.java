@@ -11,10 +11,10 @@ public class TaskDAO extends DataAccessObject<Task> {
     public TaskDAO(Connection connection) {
         super(connection);
     }
-    private static final String GET_ONE = "SELECT id, date_task FROM task WHERE id = ?";
+    private static final String GET_ONE = "SELECT id, date_task, name_of_task FROM task WHERE id = ?";
     private static final String DELETE = "DELETE FROM task WHERE id = ?";
-    private static final String UPDATE = "UPDATE task SET date_task = ? WHERE id = ?";
-    private static final String INSERT = "INSERT INTO task (date_task) VALUES (?)";
+    private static final String UPDATE = "UPDATE task SET date_task = ?, name_of_task = ? WHERE id = ?";
+    private static final String INSERT = "INSERT INTO task (date_task, name_of_task) VALUES (?, ?)";
     private static final String GET_LAST_VALUE = "SELECT MAX(id) FROM task";
 
     public Task findMaxIdTask(Task task) {
@@ -39,6 +39,7 @@ public class TaskDAO extends DataAccessObject<Task> {
             while(rs.next()){
                 task.setId(rs.getLong("id"));
                 task.setDateTask(rs.getDate("date_task"));
+                task.setNameOfTask(rs.getString("name_of_task"));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -64,6 +65,7 @@ public class TaskDAO extends DataAccessObject<Task> {
         try(PreparedStatement statement = this.connection.prepareStatement(UPDATE);){
             statement.setDate(1, (Date) dto.getDateTask());
             statement.setLong(2, dto.getId());
+            statement.setString(3, dto.getNameOfTask());
             statement.execute();
             this.connection.commit();
             task = this.findById(dto.getId());
@@ -86,6 +88,7 @@ public class TaskDAO extends DataAccessObject<Task> {
         Task task = new Task();
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT);){
             statement.setDate(1, (Date) dto.getDateTask());
+            statement.setString(2, dto.getNameOfTask());
             statement.execute();
             this.connection.commit();
             task = this.findById(dto.getId());

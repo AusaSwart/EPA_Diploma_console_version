@@ -471,7 +471,7 @@ public class EPA {
 
                         System.out.println("|-----------------------------------------------------|");
                         System.out.println();
-                        System.out.println("   Let's create task. You need to write in comment" +
+                        System.out.println("   Let's create task. Also you need to write in comment" +
                                 " what do you need");
                         Date dateT = new Date(System.currentTimeMillis());
                         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
@@ -479,6 +479,9 @@ public class EPA {
                         TaskDAO taskDAO = new TaskDAO(c);
                         Task task = new Task();
                         task.setDateTask(dateT);
+                        System.out.println("   Input type of task:");
+                        String nameOfTask = input.nextLine();
+                        task.setNameOfTask(nameOfTask);
                         taskDAO.create(task);
                         task = new Task();
                         taskDAO = new TaskDAO(c);
@@ -881,7 +884,7 @@ public class EPA {
                             System.out.println("""
                                     |------------------------------------------------------|
                                     | What part of employee's account you want to update?\040\040
-                                    |  1 - Depertment && Privilege's
+                                    |  1 - Depertment or Privilege's
                                     |  2 - Job title
                                     |  3 - Password
                                     |  4 - Exit in main menu
