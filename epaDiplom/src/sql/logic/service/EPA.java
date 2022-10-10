@@ -718,7 +718,7 @@ public class EPA {
 
                         System.out.println("|-----------------------------------------------------|");
                         System.out.println();
-                        System.out.println("   You want to change login/password (1) or contacts (2)?");
+                        System.out.println("   You want to change login (1), password(2) or contacts (3)?");
                         input = new Scanner(System.in);
                         ans = input.nextLine();
                         switch (ans) {
@@ -732,7 +732,7 @@ public class EPA {
                                     loginUser = input.nextLine();
                                     login = loginDAO.checkLogin(loginUser);
                                     if (login.getLoginUser() == null) {
-                                        System.out.println("   Okay, now password");
+                                        System.out.println("   Okay, correct");
                                         System.out.println();
                                         check = false;
                                     } else {
@@ -740,16 +740,37 @@ public class EPA {
                                         System.out.println("   Try again");
                                     }
                                 } while (check);
-                                System.out.println("  New password:");
-                                String passwordUser = input.nextLine();
+                                Login login1 = new Login();
+                                LoginDAO loginDAO1 = new LoginDAO(c);
+                                login1 = loginDAO1.findById(idEMPLOYEE);
                                 login = new Login();
                                 login.setLoginUser(loginUser);
+                                login.setPasswordUser(login1.getPasswordUser());
+                                login.setId(idEMPLOYEE);
+                                loginDAO.update(login);
+                                System.out.println("""
+                                                ___ Table login updated _____
+                                                ___login updated_____""".indent(3));
+                            }
+                            case "2" -> {
+                                LoginDAO loginDAO = new LoginDAO(c);
+                                System.out.println("  New password:");
+                                input = new Scanner(System.in);
+                                String passwordUser = input.nextLine();
+                                System.out.println("   Okay");
+                                Login login1 = new Login();
+                                LoginDAO loginDAO1 = new LoginDAO(c);
+                                login1 = loginDAO1.findById(idEMPLOYEE);
+                                Login login = new Login();
+                                login.setLoginUser(login1.getLoginUser());
                                 login.setPasswordUser(passwordUser);
                                 login.setId(idEMPLOYEE);
                                 loginDAO.update(login);
-                                System.out.println("___ Table login updated _____");
+                                System.out.println("""
+                                                ___ Table login updated _____
+                                                ___password updated_____""".indent(3));
                             }
-                            case "2" -> {
+                            case "3" -> {
                                 ContactDAO contactDAO = new ContactDAO(c);
                                 Contact contact = new Contact();
                                 System.out.println();
