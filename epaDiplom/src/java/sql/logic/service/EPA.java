@@ -12,10 +12,15 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
+//import org.epadiplom.SpringApplication;
+//import org.epadiplom.autoconfigure.SpringBootApplication;
+//import org.epadiplom.autoconfigure.EnableAutoConfiguration;
+//@SpringBootApplication
+//@EnableAutoConfiguration
 public class EPA {
 
     public static void main(String[] args) {
-
+        //SpringApplication.run(Application.class);//запуск приложения
         // Connection to DB
 
         DBConnectionManager dcm = new DBConnectionManager("127.0.0.1:5432",
