@@ -48,12 +48,11 @@ public class EPA {
 
             // Employee greetings
 
-            System.out.println("""
-                    |____________Hello, Employee. Present yourself_____________|
-                    |   Please, tape :                                         |
-                    |  1 - If you are already have login                       |
-                    |  2 - If you are need to register                         |
-                    |----------------------------------------------------------|""".indent(3));
+            System.out.println("   |____________Hello, Employee. Present yourself_____________|" +
+                    "   |   Please, tape :                                         |" +
+                    "   |  1 - If you are already have login                       |" +
+                    "   |  2 - If you are need to register                         |" +
+                    "   |----------------------------------------------------------|");
 
             System.out.println();
 
@@ -98,11 +97,9 @@ public class EPA {
                             System.out.println();
                             if (privilege == 0) {
                                 System.out.println();
-                                System.out.println("""
-                                        ++++++++++++++++++++++++++++++
-                                        +   You have been blocked    +
-                                        ++++++++++++++++++++++++++++++""");
-
+                                System.out.println(" ++++++++++++++++++++++++++++++" +
+                                                "+   You have been blocked    +" +
+                                                "++++++++++++++++++++++++++++++");
                                 System.exit(0);
                             }
                             correct = true;

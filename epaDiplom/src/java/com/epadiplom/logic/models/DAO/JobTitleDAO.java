@@ -46,7 +46,7 @@ public class JobTitleDAO extends DataAccessObject<JobTitle> {
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
             while(rs.next()){
-                jobTitle.setId(rs.getLong("id_job_title"));
+                jobTitle.setId(rs.getLong("id"));
                 jobTitle.setJobTitleName(rs.getString("job_title_name"));
             }
         }catch (SQLException e){

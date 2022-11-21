@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="epa_diplom:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>epa_diplom</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="epa-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="epa_diplom:war exploded" />
+    </root>
+  </artifact>
+</component>
